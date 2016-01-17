@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.tomek.notepad.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_delete_note"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_delete_note"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white_24px"
+        android:title="@string/action_search"
+        app:showAsAction="ifRoom"/>
 </menu>
