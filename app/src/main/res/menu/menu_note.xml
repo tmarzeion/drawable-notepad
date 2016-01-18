@@ -7,6 +7,7 @@
         android:id="@+id/action_text_format"
         android:icon="@drawable/ic_text_format_white_24px"
         android:title="@string/action_text_format"
+        android:onClick="toggleMenu"
         app:showAsAction="ifRoom"/>
 
     <item
