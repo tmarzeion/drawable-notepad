@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.tomek.notepad.NoteActivity">
+
+    <item
+        android:id="@+id/action_text_format"
+        android:icon="@drawable/ic_text_format_white_24px"
+        android:title="@string/action_text_format"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_done"
+        android:icon="@drawable/ic_done_24dp"
+        android:title="@string/action_done"
+        app:showAsAction="ifRoom"/>
+
+</menu>

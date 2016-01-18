@@ -3,4 +3,6 @@
     <string name="add_note">Add Note</string>
     <string name="action_delete_note">Delete note</string>
     <string name="action_search">Search</string>
+    <string name="action_text_format">Format Text</string>
+    <string name="action_done">Done</string>
 </resources>
