@@ -1,9 +1,12 @@
 package com.example.tomek.notepad;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
@@ -16,7 +19,21 @@ public class FormatTextContainer extends LinearLayout {
     private View content;
 
     // Layout Constants
-    protected static final int menuMargin = 150;
+
+    int height = calculateHeight();
+
+    private int calculateHeight() {
+
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        return size.y;
+    }
+
+    private static final double menuMarginRelativeModifier = 1.5;
+    protected int menuMargin = ((int) Math.round(height / menuMarginRelativeModifier));
 
     public enum MenuState {
         CLOSED, OPEN, CLOSING, OPENING
@@ -66,10 +83,10 @@ public class FormatTextContainer extends LinearLayout {
         if (changed)
             this.calculateChildDimensions();
 
-        this.menu.layout(left, top, right - menuMargin, bottom);
+        this.menu.layout(left, top + menuMargin, right, bottom);
 
-        this.content.layout(left + this.currentContentOffset, top, right
-                + this.currentContentOffset, bottom);
+        this.content.layout(left, top + this.currentContentOffset, right,
+                bottom + this.currentContentOffset);
 
     }
 
@@ -78,13 +95,13 @@ public class FormatTextContainer extends LinearLayout {
             case CLOSED:
                 this.menuCurrentState = MenuState.OPENING;
                 this.menu.setVisibility(View.VISIBLE);
-                this.menuAnimationScroller.startScroll(0, 0, this.getMenuWidth(),
-                        0, menuAnimationDuration);
+                this.menuAnimationScroller.startScroll(0, 0, 0,
+                        -this.getMenuHeight(), menuAnimationDuration);
                 break;
             case OPEN:
                 this.menuCurrentState = MenuState.CLOSING;
-                this.menuAnimationScroller.startScroll(this.currentContentOffset,
-                        0, -this.currentContentOffset, 0, menuAnimationDuration);
+                this.menuAnimationScroller.startScroll(0, this.currentContentOffset,
+                        0, -this.currentContentOffset, menuAnimationDuration);
                 break;
             default:
                 return;
@@ -96,22 +113,22 @@ public class FormatTextContainer extends LinearLayout {
         this.invalidate();
     }
 
-    private int getMenuWidth() {
-        return this.menu.getLayoutParams().width;
+    private int getMenuHeight() {
+        return this.menu.getLayoutParams().height;
     }
 
     private void calculateChildDimensions() {
         this.content.getLayoutParams().height = this.getHeight();
         this.content.getLayoutParams().width = this.getWidth();
 
-        this.menu.getLayoutParams().width = this.getWidth() - menuMargin;
-        this.menu.getLayoutParams().height = this.getHeight();
+        this.menu.getLayoutParams().width = this.getWidth();
+        this.menu.getLayoutParams().height = this.getHeight() - menuMargin;
     }
 
     private void adjustContentPosition(boolean isAnimationOngoing) {
-        int scrollerOffset = this.menuAnimationScroller.getCurrX();
+        int scrollerOffset = this.menuAnimationScroller.getCurrY();
 
-        this.content.offsetLeftAndRight(scrollerOffset
+        this.content.offsetTopAndBottom(scrollerOffset
                 - this.currentContentOffset);
 
         this.currentContentOffset = scrollerOffset;

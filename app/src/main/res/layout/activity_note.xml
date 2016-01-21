@@ -9,6 +9,14 @@
         android:layout_height="match_parent"
         android:background="@color/colorLightAccent"
         android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/content_text_format" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
