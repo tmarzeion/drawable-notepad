@@ -5,6 +5,7 @@
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sliderMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorLightAccent"
@@ -15,12 +16,13 @@
     </LinearLayout>
 
     <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    android:gravity="center"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/textContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        android:gravity="bottom"
         android:weightSum="1">
 
         <EditText

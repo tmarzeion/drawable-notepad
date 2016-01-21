@@ -6,9 +6,11 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 
@@ -20,24 +22,26 @@ public class FormatTextContainer extends LinearLayout {
 
     // Layout Constants
 
-    int height = calculateHeight();
 
-    private int calculateHeight() {
+    private int calculateMenuMargin() {
 
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
 
-        return size.y;
+        int height = size.y;
+
+        return  ((int) Math.round(height * menuMarginRelativeModifier));
     }
 
     private static final double menuMarginRelativeModifier = 0.6;
-    protected int menuMargin = ((int) Math.round(height * menuMarginRelativeModifier));
+    // default 300
+    protected int menuMargin = 300;
 
     public enum MenuState {
         CLOSED, OPEN, CLOSING, OPENING
-    };
+    }
 
     // Position information attributes
     protected int currentContentOffset = 0;
@@ -71,6 +75,8 @@ public class FormatTextContainer extends LinearLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
+        menuMargin = calculateMenuMargin();
+
         this.menu = this.getChildAt(0);
         this.content = this.getChildAt(1);
 
@@ -90,16 +96,33 @@ public class FormatTextContainer extends LinearLayout {
 
     }
 
+    private void calculateAndApplyTextContentSize() {
+
+        LinearLayout textContent = (LinearLayout) findViewById(R.id.textContent);
+        ViewGroup.LayoutParams params = textContent.getLayoutParams();
+
+        switch (this.menuCurrentState) {
+            case OPENING:
+                params.height = params.height - (params.height - menuMargin);
+                break;
+            case CLOSING:
+                params.height = params.height + (textContent.getHeight() - menuMargin);
+                break;
+        }
+    }
+
     public void toggleMenu() {
         switch (this.menuCurrentState) {
             case CLOSED:
                 this.menuCurrentState = MenuState.OPENING;
+                calculateAndApplyTextContentSize();
                 this.menu.setVisibility(View.VISIBLE);
                 this.menuAnimationScroller.startScroll(0, 0, 0,
                         -this.getMenuHeight(), menuAnimationDuration);
                 break;
             case OPEN:
                 this.menuCurrentState = MenuState.CLOSING;
+                calculateAndApplyTextContentSize();
                 this.menuAnimationScroller.startScroll(0, this.currentContentOffset,
                         0, -this.currentContentOffset, menuAnimationDuration);
                 break;
@@ -151,8 +174,6 @@ public class FormatTextContainer extends LinearLayout {
                 this.menuCurrentState = MenuState.CLOSED;
                 this.menu.setVisibility(View.GONE);
                 break;
-            default:
-                return;
         }
     }
 
