@@ -32,8 +32,8 @@ public class FormatTextContainer extends LinearLayout {
         return size.y;
     }
 
-    private static final double menuMarginRelativeModifier = 1.5;
-    protected int menuMargin = ((int) Math.round(height / menuMarginRelativeModifier));
+    private static final double menuMarginRelativeModifier = 0.6;
+    protected int menuMargin = ((int) Math.round(height * menuMarginRelativeModifier));
 
     public enum MenuState {
         CLOSED, OPEN, CLOSING, OPENING
