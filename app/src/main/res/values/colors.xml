@@ -4,4 +4,11 @@
     <color name="colorPrimaryDark">#54748b</color>
     <color name="colorAccent">#8499b1</color>
     <color name="colorLightAccent">#bdcfe4</color>
+
+    <color name="textFormatBlack">#000000</color>
+    <color name="textFormatRed">#e8000d</color>
+    <color name="textFormatBlue">#1c39bb</color>
+    <color name="textFormatGreen">#32cd32</color>
+    <color name="textFormatYellow">#e6e200</color>
+
 </resources>
