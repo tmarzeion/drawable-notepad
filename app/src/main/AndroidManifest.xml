@@ -21,7 +21,6 @@
         <activity
             android:name=".NoteActivity"
             android:label="@string/add_note" />
-        <activity android:name=".FormatTextContainer"></activity>
     </application>
 
 </manifest>

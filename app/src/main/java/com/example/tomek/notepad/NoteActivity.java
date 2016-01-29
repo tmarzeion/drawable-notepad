@@ -3,14 +3,18 @@ package com.example.tomek.notepad;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +36,14 @@ public class NoteActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textViewSize14)).setPaintFlags(((TextView) findViewById(R.id.textViewSize14))
                 .getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         sizeChosen = Integer.parseInt((findViewById(R.id.textViewSize14)).getTag().toString());
+
+        // open keyboard as default
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
+        // disable soft keyboard when editText is focused
+        EditText editText = ((EditText) findViewById(R.id.editText));
+        disableSoftInputFromAppearing(editText);
     }
 
     @Override
@@ -81,5 +93,21 @@ public class NoteActivity extends AppCompatActivity {
         size18.setPaintFlags(0);
         size24.setPaintFlags(0);
         size36.setPaintFlags(0);
+    }
+
+    public void toggleKeyboard(MenuItem item) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+
+    public static void disableSoftInputFromAppearing(EditText editText) {
+        if (Build.VERSION.SDK_INT >= 11) {
+            editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
+            editText.setTextIsSelectable(true);
+        } else {
+            editText.setRawInputType(InputType.TYPE_NULL);
+            editText.setFocusable(true);
+        }
     }
 }
