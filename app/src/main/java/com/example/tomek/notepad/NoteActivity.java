@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.ActionMode;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,13 +38,19 @@ public class NoteActivity extends AppCompatActivity {
                 .getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         sizeChosen = Integer.parseInt((findViewById(R.id.textViewSize14)).getTag().toString());
 
+        /*
         // open keyboard as default
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        */
 
         // disable soft keyboard when editText is focused
         EditText editText = ((EditText) findViewById(R.id.editText));
         disableSoftInputFromAppearing(editText);
+
+
+        //test
+        manageContextMenuBar(editText);
     }
 
     @Override
@@ -97,11 +104,11 @@ public class NoteActivity extends AppCompatActivity {
 
     public void toggleKeyboard(MenuItem item) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
 
-    public static void disableSoftInputFromAppearing(EditText editText) {
+    private static void disableSoftInputFromAppearing(EditText editText) {
         if (Build.VERSION.SDK_INT >= 11) {
             editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
             editText.setTextIsSelectable(true);
@@ -109,5 +116,33 @@ public class NoteActivity extends AppCompatActivity {
             editText.setRawInputType(InputType.TYPE_NULL);
             editText.setFocusable(true);
         }
+    }
+
+    private void manageContextMenuBar(EditText editText) {
+
+        editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return true;
+            }
+
+            public void onDestroyActionMode(ActionMode mode) {
+                if (findViewById(R.id.sliderMenu).getVisibility() == View.VISIBLE) {
+                    findViewById(R.id.sliderMenu).setVisibility(View.GONE);
+                }
+            }
+
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+                if (findViewById(R.id.sliderMenu).getVisibility() == View.GONE) {
+                    findViewById(R.id.sliderMenu).setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return true;
+            }
+        });
     }
 }
