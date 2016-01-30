@@ -233,6 +233,8 @@ public class NoteActivity extends AppCompatActivity {
 
     public void saveOrUpdateNote(MenuItem item) {
 
+        spannable = editText.getText();
+
         if (editText.getText().length() != 0) {
             if (noteID == -1) {
                 Note note = new Note (dbHandler.getNoteCount(), spannable);

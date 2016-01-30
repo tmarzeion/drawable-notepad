@@ -10,14 +10,29 @@ public class Note {
 
     private int mId;
     private Spannable mSpannable;
+    private String rawText;
     private String title;
 
     public Note(int id, Spannable spannable) {
         mId = id;
         mSpannable = spannable;
 
-        String htmlSpan = Html.toHtml(spannable).toString();
-        title = htmlSpan; //.substring(0,htmlSpan.length()-1);
+        rawText = mSpannable.toString();
+
+        title = createTitle(rawText);
+    }
+
+    private String createTitle(String rawText) {
+
+        String result;
+
+        if (rawText.length() > 25) {
+            result = rawText.substring(0,25) + "...";
+        }
+        else {
+            result = rawText;
+        }
+        return result;
     }
 
     public int getId() {

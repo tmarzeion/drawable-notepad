@@ -18,11 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseHandler dbHandler;
 
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,20 +40,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void populateListView(ArrayList<Note> allNotes) {
-
-        String[] noteTitles = new String[allNotes.size()];
-
-        for (int i = 0; i < allNotes.size(); i++) {
-            noteTitles[i] = allNotes.get(i).getTitle();
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                R.layout.list_view_item_main, noteTitles);
-
-        ListView list = (ListView) findViewById(R.id.listView);
-        list.setAdapter(arrayAdapter);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -74,14 +55,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void fillNoteList(ListView listView) {
+    //TODO Confirm popup menu
+    //TODO Refresh db after deleting
+    //TODO New Activity when back button is clicked
+    public void deleteAllNotes(MenuItem item) {
+        dbHandler.clearAllNotes();
+    }
 
-        ArrayList<Note> notes = dbHandler.getAllNotes();
-        ArrayList<String> titles = new ArrayList<>();
+    private void populateListView(ArrayList<Note> allNotes) {
 
+        String[] noteTitles = new String[allNotes.size()];
 
+        for (int i = 0; i < allNotes.size(); i++) {
+            noteTitles[i] = allNotes.get(i).getTitle();
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                R.layout.list_view_item_main, noteTitles);
 
-
-
+        ListView list = (ListView) findViewById(R.id.listView);
+        list.setAdapter(arrayAdapter);
     }
 }

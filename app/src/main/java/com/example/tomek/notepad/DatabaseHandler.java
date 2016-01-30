@@ -37,6 +37,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void clearAllNotes() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM "+ TABLE_NOTES);
+    }
+
     public void createNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -97,7 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public ArrayList<Note> getAllNotes() {
-        ArrayList<Note> notes = new ArrayList<Note>();
+        ArrayList<Note> notes = new ArrayList<>();
 
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NOTES, null);
