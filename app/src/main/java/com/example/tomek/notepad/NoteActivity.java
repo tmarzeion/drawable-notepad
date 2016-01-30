@@ -1,6 +1,7 @@
 package com.example.tomek.notepad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -34,6 +35,15 @@ public class NoteActivity extends AppCompatActivity {
 
     private static final double MENU_MARGIN_RELATIVE_MODIFIER = 0.3;
     private LinearLayout mSliderLayout;
+    private int noteID;
+
+    private EditText editText;
+
+
+    private Spannable spannable;
+
+
+    DatabaseHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,14 @@ public class NoteActivity extends AppCompatActivity {
         mSliderLayout = (LinearLayout) findViewById(R.id.sliderMenu);
         ViewGroup.LayoutParams params = mSliderLayout.getLayoutParams();
         params.height = calculateMenuMargin();
+        editText = ((EditText) findViewById(R.id.editText));
+
+
+        dbHandler = new DatabaseHandler(getApplicationContext());
+        spannable = editText.getText();
+        // get ID data from indent
+        Intent intent = getIntent();
+        noteID = Integer.parseInt(intent.getStringExtra("id"));
 
         /*
         // open keyboard as default
@@ -50,7 +68,6 @@ public class NoteActivity extends AppCompatActivity {
         */
 
         // disable soft keyboard when editText is focused
-        EditText editText = ((EditText) findViewById(R.id.editText));
         disableSoftInputFromAppearing(editText);
 
 
@@ -146,7 +163,7 @@ public class NoteActivity extends AppCompatActivity {
     public void formatTextActionPerformed(View view) {
 
         EditText editText = ((EditText) findViewById(R.id.editText));
-        Spannable spannable = editText.getText();
+        spannable = editText.getText();
 
         int posStart = editText.getSelectionStart();
         int posEnd = editText.getSelectionEnd();
@@ -211,11 +228,29 @@ public class NoteActivity extends AppCompatActivity {
         else if (view.getTag().toString().equals("36")) {
             spannable.setSpan(new AbsoluteSizeSpan(36, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-
-
-
         editText.setText(spannable);
+    }
 
+    public void saveOrUpdateNote(MenuItem item) {
+
+        if (editText.getText().length() != 0) {
+            if (noteID == -1) {
+                Note note = new Note (dbHandler.getNoteCount(), spannable);
+                dbHandler.createNote(note);
+            }
+            else {
+                Note note = new Note (noteID, spannable);
+                dbHandler.updateNote(note);
+            }
+        } else {
+            if (noteID != -1) {
+                Note note = new Note (noteID, spannable);
+                dbHandler.deleteNote(note);
+            }
+        }
+
+        Intent intent = new Intent(NoteActivity.this, MainActivity.class);
+        startActivity(intent);
 
     }
 }

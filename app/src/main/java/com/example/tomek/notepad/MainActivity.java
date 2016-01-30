@@ -8,8 +8,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    DatabaseHandler dbHandler;
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +30,33 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        dbHandler = new DatabaseHandler(getApplicationContext());
+        populateListView(dbHandler.getAllNotes());
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+                intent.putExtra("id", "-1");
                 startActivity(intent);
             }
         });
+    }
+
+    private void populateListView(ArrayList<Note> allNotes) {
+
+        String[] noteTitles = new String[allNotes.size()];
+
+        for (int i = 0; i < allNotes.size(); i++) {
+            noteTitles[i] = allNotes.get(i).getTitle();
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                R.layout.list_view_item_main, noteTitles);
+
+        ListView list = (ListView) findViewById(R.id.listView);
+        list.setAdapter(arrayAdapter);
     }
 
     @Override
@@ -41,5 +72,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void fillNoteList(ListView listView) {
+
+        ArrayList<Note> notes = dbHandler.getAllNotes();
+        ArrayList<String> titles = new ArrayList<>();
+
+
+
+
+
     }
 }
