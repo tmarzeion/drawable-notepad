@@ -10,5 +10,6 @@
     <color name="textFormatBlue">#1c39bb</color>
     <color name="textFormatGreen">#32cd32</color>
     <color name="textFormatYellow">#e6e200</color>
+    <color name="textFormatWhite">#EEEEEE</color>
 
 </resources>

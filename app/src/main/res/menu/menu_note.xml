@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_toggle_keyboard"
         android:icon="@drawable/ic_keyboard_24px"
-        android:title="@string/action_text_format"
+        android:title="@string/action_toggle_keyboard"
         android:onClick="toggleKeyboard"
         app:showAsAction="ifRoom"/>
 

@@ -41,7 +41,7 @@
                     android:tag="10"
                     android:text="10"
                     android:clickable="true"
-                    android:onClick="textSizeChanged"
+                    android:onClick="formatTextActionPerformed"
                     android:id="@+id/textViewSize10"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -54,7 +54,7 @@
                     android:tag="12"
                     android:text="12"
                     android:clickable="true"
-                    android:onClick="textSizeChanged"
+                    android:onClick="formatTextActionPerformed"
                     android:id="@+id/textViewSize12"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -67,7 +67,7 @@
                     android:tag="14"
                     android:text="14"
                     android:clickable="true"
-                    android:onClick="textSizeChanged"
+                    android:onClick="formatTextActionPerformed"
                     android:id="@+id/textViewSize14"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -80,7 +80,7 @@
                     android:tag="18"
                     android:text="18"
                     android:clickable="true"
-                    android:onClick="textSizeChanged"
+                    android:onClick="formatTextActionPerformed"
                     android:id="@+id/textViewSize18"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -93,7 +93,7 @@
                     android:tag="24"
                     android:text="24"
                     android:clickable="true"
-                    android:onClick="textSizeChanged"
+                    android:onClick="formatTextActionPerformed"
                     android:id="@+id/textViewSize24"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -106,7 +106,7 @@
                     android:tag="36"
                     android:text="36"
                     android:clickable="true"
-                    android:onClick="textSizeChanged"
+                    android:onClick="formatTextActionPerformed"
                     android:id="@+id/textViewSize36"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -136,8 +136,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_format_text_color_24px"
+                    android:onClick="formatTextActionPerformed"
                     android:layout_marginLeft="10dp"
                     android:id="@+id/imageButtonTextColorBlack"
+                    android:tag="textBlack"
                     android:tint="@color/textFormatBlack" />
 
                 <ImageButton
@@ -145,6 +147,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextColorRed"
                     android:src="@drawable/ic_format_text_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="textRed"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatRed" />
 
@@ -153,6 +157,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextColorBlue"
                     android:src="@drawable/ic_format_text_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="textBlue"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatBlue" />
 
@@ -161,6 +167,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextColorGreen"
                     android:src="@drawable/ic_format_text_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="textGreen"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatGreen" />
 
@@ -169,6 +177,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextColorYellow"
                     android:src="@drawable/ic_format_text_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="textYellow"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatYellow" />
 
@@ -195,16 +205,20 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonTextHighlightColorBlack"
+                    android:id="@+id/imageButtonTextHighlightColorWhite"
                     android:src="@drawable/ic_format_highlight_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="highlightWhite"
                     android:layout_marginLeft="10dp"
-                    android:tint="@color/textFormatBlack" />
+                    android:tint="@color/textFormatWhite" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextHighlightColorRed"
                     android:src="@drawable/ic_format_highlight_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="highlightRed"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatRed" />
 
@@ -213,6 +227,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextHighlightColorBlue"
                     android:src="@drawable/ic_format_highlight_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="highlightBlue"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatBlue" />
 
@@ -222,6 +238,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextHighlightColorGreen"
                     android:src="@drawable/ic_format_highlight_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="highlightGreen"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatGreen" />
 
@@ -231,6 +249,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonTextHighlightColorYellow"
                     android:src="@drawable/ic_format_highlight_color_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="highlightYellow"
                     android:layout_marginLeft="10dp"
                     android:tint="@color/textFormatYellow" />
 
@@ -259,6 +279,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonBold"
                     android:src="@drawable/ic_format_bold_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="bold"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp" />
 
@@ -267,6 +289,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonItalic"
                     android:src="@drawable/ic_format_italic_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="italic"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp" />
 
@@ -275,6 +299,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonUnderline"
                     android:src="@drawable/ic_format_underlined_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="underline"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp" />
 
@@ -283,6 +309,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageButtonStrikethrough"
                     android:src="@drawable/ic_format_strikethrough_24px"
+                    android:onClick="formatTextActionPerformed"
+                    android:tag="strikethrough"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp" />
 

@@ -1,12 +1,23 @@
 package com.example.tomek.notepad;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.ActionMode;
 import android.view.Display;
 import android.view.Menu;
@@ -23,7 +34,6 @@ public class NoteActivity extends AppCompatActivity {
 
     private static final double MENU_MARGIN_RELATIVE_MODIFIER = 0.3;
     private LinearLayout mSliderLayout;
-    private int sizeChosen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +42,6 @@ public class NoteActivity extends AppCompatActivity {
         mSliderLayout = (LinearLayout) findViewById(R.id.sliderMenu);
         ViewGroup.LayoutParams params = mSliderLayout.getLayoutParams();
         params.height = calculateMenuMargin();
-
-        //default size chosen:
-        ((TextView) findViewById(R.id.textViewSize14)).setPaintFlags(((TextView) findViewById(R.id.textViewSize14))
-                .getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        sizeChosen = Integer.parseInt((findViewById(R.id.textViewSize14)).getTag().toString());
 
         /*
         // open keyboard as default
@@ -75,15 +80,6 @@ public class NoteActivity extends AppCompatActivity {
         display.getSize(size);
         int height = size.y;
         return  ((int) Math.round(height * MENU_MARGIN_RELATIVE_MODIFIER));
-    }
-
-    public void textSizeChanged(View v) {
-        TextView textView = ((TextView) v);
-
-        refreshSizeOptionsUnderline();
-        sizeChosen = Integer.parseInt(textView.getTag().toString());
-
-        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
     private void refreshSizeOptionsUnderline() {
@@ -144,5 +140,82 @@ public class NoteActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+
+    public void formatTextActionPerformed(View view) {
+
+        EditText editText = ((EditText) findViewById(R.id.editText));
+        Spannable spannable = editText.getText();
+
+        int posStart = editText.getSelectionStart();
+        int posEnd = editText.getSelectionEnd();
+
+        if (view.getTag().toString().equals("bold")) {
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("italic")) {
+            spannable.setSpan(new StyleSpan(Typeface.ITALIC), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("underline")) {
+            spannable.setSpan(new UnderlineSpan(), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("strikethrough")) {
+            spannable.setSpan(new StrikethroughSpan(), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("textBlack")) {
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("textRed")) {
+            spannable.setSpan(new ForegroundColorSpan(Color.RED), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("textBlue")) {
+            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("textGreen")) {
+            spannable.setSpan(new ForegroundColorSpan(Color.GREEN), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("textYellow")) {
+            spannable.setSpan(new ForegroundColorSpan(Color.YELLOW), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("highlightWhite")) {
+            spannable.setSpan(new BackgroundColorSpan(238238238), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("highlightRed")) {
+            spannable.setSpan(new BackgroundColorSpan(Color.RED), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("highlightBlue")) {
+            spannable.setSpan(new BackgroundColorSpan(Color.BLUE), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("highlightGreen")) {
+            spannable.setSpan(new BackgroundColorSpan(Color.GREEN), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("highlightYellow")) {
+            spannable.setSpan(new BackgroundColorSpan(Color.YELLOW), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("10")) {
+            spannable.setSpan(new AbsoluteSizeSpan(10, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("12")) {
+            spannable.setSpan(new AbsoluteSizeSpan(12, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("14")) {
+            spannable.setSpan(new AbsoluteSizeSpan(14, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("18")) {
+            spannable.setSpan(new AbsoluteSizeSpan(18, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("24")) {
+            spannable.setSpan(new AbsoluteSizeSpan(24, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else if (view.getTag().toString().equals("36")) {
+            spannable.setSpan(new AbsoluteSizeSpan(36, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+
+
+        editText.setText(spannable);
+
+
     }
 }
