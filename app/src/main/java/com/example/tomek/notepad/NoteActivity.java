@@ -1,9 +1,10 @@
 package com.example.tomek.notepad;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -11,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -29,59 +28,150 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
+/**
+ * Note Activity class that handles:
+ * - New notes creation,
+ * - Updating existing ones,
+ * - Deleting existing ones if text is changed to blank
+ * - Text formatting
+ */
 public class NoteActivity extends AppCompatActivity {
 
+    //TODO Using @String res instead of hardcoded strings
+
+    // Database Handler
+    private DatabaseHandler dbHandler;
+
+    // Percent of total layout height that is prepared for format text panel
+    // Default 0.3, Values  0 < x < 1
     private static final double MENU_MARGIN_RELATIVE_MODIFIER = 0.3;
+
+    // format text panel container
     private LinearLayout mSliderLayout;
+
+    // Actual Note ID
+    // (is -1 when it's new note)
     private int noteID;
 
+    // EditText panel
     private EditText editText;
 
-
+    // Spannable used to format text
+    // Converted to HTML String in database
     private Spannable spannable;
 
-
-    DatabaseHandler dbHandler;
+    // Alert dialogs for back button and done button
+    AlertDialog alertDialogBackToPrevScreen;
+    AlertDialog alertDialogSaveChanges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+
+        // Set Views fields values
+        editText = ((EditText) findViewById(R.id.editText));
         mSliderLayout = (LinearLayout) findViewById(R.id.sliderMenu);
+
+        // Get params for format text panel
         ViewGroup.LayoutParams params = mSliderLayout.getLayoutParams();
         params.height = calculateMenuMargin();
-        editText = ((EditText) findViewById(R.id.editText));
 
-
+        // Create DatabaseHandler
         dbHandler = new DatabaseHandler(getApplicationContext());
+
+        // Get default spannable value
         spannable = editText.getText();
+
+        // Setup AlertDialogs
+        alertDialogBackToPrevScreen = initAlertDialogBackToPrevScreen();
+        alertDialogSaveChanges = initAlertDialogSaveChanges();
+
         // get ID data from indent
         Intent intent = getIntent();
         noteID = Integer.parseInt(intent.getStringExtra("id"));
 
-        /*
-        // open keyboard as default
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
-        */
-
         // disable soft keyboard when editText is focused
         disableSoftInputFromAppearing(editText);
 
-
-        //test
+        // Auto-enable format menu panel when text is selected
         manageContextMenuBar(editText);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Creating menu
         getMenuInflater().inflate(R.menu.menu_note, menu);
         return true;
     }
 
+    /**
+     * Method used for first setup of done button AlertDialog
+     */
+    private AlertDialog initAlertDialogSaveChanges() {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save changes").setMessage("Do you want to save changes?");
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                saveOrUpdateNote();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Nothing happens here...
+            }
+        });
+        return builder.create();
+    }
+
+    /**
+     * Method used for first setup of back button AlertDialog
+     */
+    private AlertDialog initAlertDialogBackToPrevScreen() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Back to menu").setMessage("Quit without saving changes?");
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(NoteActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                Runtime.getRuntime().gc();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Nothing happens here...
+            }
+        });
+        return builder.create();
+    }
+
+    /**
+     * Method used to show AlertDialog when done button is clicked
+     */
+    public void showAlertDialogSaveChanges() {
+        alertDialogSaveChanges.show();
+    }
+
+    /**
+     * Method that Overrides back button behavior
+     * When back button is pressed it shows "back button" AlertDialog
+     */
+    @Override
+    public void onBackPressed() {
+        alertDialogBackToPrevScreen.show();
+    }
+
+    /**
+     * Method used to toggle format text panel
+     * @param item MenuItem that handles that method in .xml android:OnClick
+     */
     public void toggleMenu(MenuItem item) {
         if (findViewById(R.id.sliderMenu).getVisibility() == View.VISIBLE) {
             findViewById(R.id.sliderMenu).setVisibility(View.GONE);
@@ -90,6 +180,10 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method that calculates space left for EditText when format text panel is Visible
+     * @return Screen independent pixel count of space for EditText
+     */
     private int calculateMenuMargin() {
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -99,28 +193,19 @@ public class NoteActivity extends AppCompatActivity {
         return  ((int) Math.round(height * MENU_MARGIN_RELATIVE_MODIFIER));
     }
 
-    private void refreshSizeOptionsUnderline() {
-        TextView size10 = (TextView) findViewById(R.id.textViewSize10);
-        TextView size12 = (TextView) findViewById(R.id.textViewSize12);
-        TextView size14 = (TextView) findViewById(R.id.textViewSize14);
-        TextView size18 = (TextView) findViewById(R.id.textViewSize18);
-        TextView size24 = (TextView) findViewById(R.id.textViewSize24);
-        TextView size36 = (TextView) findViewById(R.id.textViewSize36);
-
-        size10.setPaintFlags(0);
-        size12.setPaintFlags(0);
-        size14.setPaintFlags(0);
-        size18.setPaintFlags(0);
-        size24.setPaintFlags(0);
-        size36.setPaintFlags(0);
-    }
-
+    /**
+     * Method used to toggle soft keyboard
+     * @param item MenuItem that handles that method in .xml android:OnClick
+     */
     public void toggleKeyboard(MenuItem item) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-
+    /**
+     * Method that prevents soft keyboard appear when EditText is focused
+     * @param editText EditText to apply changes to
+     */
     private static void disableSoftInputFromAppearing(EditText editText) {
         if (Build.VERSION.SDK_INT >= 11) {
             editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
@@ -131,6 +216,11 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method used to show format text panel when context menu is ON
+     * i.e. When text is selected
+     * @param editText EditText to apply changes to
+     */
     private void manageContextMenuBar(EditText editText) {
 
         editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
@@ -159,7 +249,10 @@ public class NoteActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Method used to format selected text by modifying Spannable object
+     * @param view that handles that method in .xml android:OnClick
+     */
     public void formatTextActionPerformed(View view) {
 
         EditText editText = ((EditText) findViewById(R.id.editText));
@@ -231,7 +324,11 @@ public class NoteActivity extends AppCompatActivity {
         editText.setText(spannable);
     }
 
-    public void saveOrUpdateNote(MenuItem item) {
+    /**
+     * Method used for Saving/Updating/Deleting note with special conditions
+     * Handled by "Done button"
+     */
+    public void saveOrUpdateNote() {
 
         spannable = editText.getText();
 
@@ -239,20 +336,31 @@ public class NoteActivity extends AppCompatActivity {
             if (noteID == -1) {
                 Note note = new Note (dbHandler.getNoteCount(), spannable);
                 dbHandler.createNote(note);
+
+                Toast.makeText(NoteActivity.this, "Note created",
+                        Toast.LENGTH_SHORT).show();
             }
             else {
                 Note note = new Note (noteID, spannable);
                 dbHandler.updateNote(note);
+
+                Toast.makeText(NoteActivity.this, "Note updated",
+                        Toast.LENGTH_SHORT).show();
             }
         } else {
             if (noteID != -1) {
                 Note note = new Note (noteID, spannable);
                 dbHandler.deleteNote(note);
+
+                Toast.makeText(NoteActivity.this, "Note is blank. Deleting note...",
+                        Toast.LENGTH_SHORT).show();
             }
         }
 
         Intent intent = new Intent(NoteActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
+        Runtime.getRuntime().gc();
 
     }
 }

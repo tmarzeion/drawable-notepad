@@ -21,7 +21,7 @@
         android:id="@+id/action_done"
         android:icon="@drawable/ic_done_24dp"
         android:title="@string/action_done"
-        android:onClick="saveOrUpdateNote"
+        android:onClick="showAlertDialogSaveChanges"
         app:showAsAction="ifRoom"/>
 
 </menu>

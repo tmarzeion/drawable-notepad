@@ -10,7 +10,7 @@ import android.text.Spannable;
 import java.util.ArrayList;
 
 /**
- * Created by tomek on 30.01.16.
+ * DatabaseHandler class used for Creating, Accessing and Modifying SQLite Database
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -37,24 +37,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Method used to clear notes table
+     */
     public void clearAllNotes() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM "+ TABLE_NOTES);
     }
 
+    /**
+     * Method used to put Note object into Database
+     * @param note Note object to put into DB
+     */
     public void createNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
-
         String spannableAsHtml = Html.toHtml(note.getSpannable());
-
         ContentValues values = new ContentValues();
         values.put(KEY_SPANNABLE_NOTE, spannableAsHtml);
-
         db.insert(TABLE_NOTES, null, values);
-
         db.close();
     }
 
+    /**
+     * Method used to get specified Note from Database
+     * @param id KEY_ID of Note to get from Database
+     * @return Note object with specified KEY_ID
+     */
     public Note getNote(int id) {
         SQLiteDatabase db = getReadableDatabase();
 
@@ -73,12 +81,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return new Note(id, spannable);
     }
 
+    /**
+     * Method used to delete specified Note from Database
+     * @param note Note to delete
+     */
     public void deleteNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NOTES, KEY_ID + "=?", new String[] { String.valueOf(note.getId())});
         db.close();
     }
 
+    /**
+     * Method used to get count of notes in Database
+     * @return count of notes in Database
+     */
     public int getNoteCount() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NOTES, null);
@@ -89,6 +105,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * Method used to update Note's text/format
+     * @param note Note to update
+     * @return updated Note
+     */
     public int updateNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -101,6 +122,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return db.update(TABLE_NOTES, values, KEY_ID + "=?", new String[]{String.valueOf(note.getId())});
     }
 
+    /**
+     * Method used to get all notes in Database
+     * @return ArrayList of Notes, containing all notes in Database
+     */
     public ArrayList<Note> getAllNotes() {
         ArrayList<Note> notes = new ArrayList<>();
 
