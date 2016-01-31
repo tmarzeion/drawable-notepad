@@ -135,7 +135,15 @@ public class NoteActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        alertDialogBackToPrevScreen.show();
+        if (editText.getText().toString().length() != 0) {
+            alertDialogBackToPrevScreen.show();
+        }
+        else {
+            Intent intent = new Intent(NoteActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            Runtime.getRuntime().gc();
+        }
     }
 
     /**
