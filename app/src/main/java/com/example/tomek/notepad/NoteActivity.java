@@ -62,9 +62,8 @@ public class NoteActivity extends AppCompatActivity {
     // Converted to HTML String in database
     private Spannable spannable;
 
-    // Alert dialogs for back button and done button
+    // Alert dialog for back button
     AlertDialog alertDialogBackToPrevScreen;
-    AlertDialog alertDialogSaveChanges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +84,8 @@ public class NoteActivity extends AppCompatActivity {
         // Get default spannable value
         spannable = editText.getText();
 
-        // Setup AlertDialogs
+        // Setup AlertDialog
         alertDialogBackToPrevScreen = initAlertDialogBackToPrevScreen();
-        alertDialogSaveChanges = initAlertDialogSaveChanges();
 
         // get ID data from indent
         Intent intent = getIntent();
@@ -105,27 +103,6 @@ public class NoteActivity extends AppCompatActivity {
         // Creating menu
         getMenuInflater().inflate(R.menu.menu_note, menu);
         return true;
-    }
-
-    /**
-     * Method used for first setup of done button AlertDialog
-     */
-    private AlertDialog initAlertDialogSaveChanges() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Save changes").setMessage("Do you want to save changes?");
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                saveOrUpdateNote();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Nothing happens here...
-            }
-        });
-        return builder.create();
     }
 
     /**
@@ -150,13 +127,6 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
         return builder.create();
-    }
-
-    /**
-     * Method used to show AlertDialog when done button is clicked
-     */
-    public void showAlertDialogSaveChanges() {
-        alertDialogSaveChanges.show();
     }
 
     /**
@@ -328,7 +298,8 @@ public class NoteActivity extends AppCompatActivity {
      * Method used for Saving/Updating/Deleting note with special conditions
      * Handled by "Done button"
      */
-    public void saveOrUpdateNote() {
+    //TODO Disable keyboard if present
+    public void saveOrUpdateNote(MenuItem menuItem) {
 
         spannable = editText.getText();
 
@@ -349,6 +320,7 @@ public class NoteActivity extends AppCompatActivity {
             }
         } else {
             if (noteID != -1) {
+
                 Note note = new Note (noteID, spannable);
                 dbHandler.deleteNote(note);
 
@@ -361,6 +333,5 @@ public class NoteActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         Runtime.getRuntime().gc();
-
     }
 }
