@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -96,7 +97,23 @@ public class NoteActivity extends AppCompatActivity {
 
         // Auto-enable format menu panel when text is selected
         manageContextMenuBar(editText);
+
+        // disable keyboard suggestions
+        // suggestions were causing formatting bugs by messing in spannable object
+        disableKeyboardSuggestions(editText);
     }
+
+    /**
+     *  Disables soft keyboard text suggestions
+     *  Solution is caused by formatting text bugs
+     *  @param et EditText to disable suggestions for
+     */
+    private void disableKeyboardSuggestions(EditText et) {
+        et.setInputType(et.getInputType()
+                | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                | EditorInfo.TYPE_TEXT_VARIATION_FILTER);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
