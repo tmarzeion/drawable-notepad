@@ -17,6 +17,8 @@
         android:inputType="textFilter|textNoSuggestions"
         android:hint="@string/hint_write_note"
         android:layout_margin="5dp" />
+    <!-- TODO: inputType may be not necessary -->
+
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

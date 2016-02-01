@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -41,6 +42,8 @@ import android.widget.Toast;
 public class NoteActivity extends AppCompatActivity {
 
     //TODO Using @String res instead of hardcoded strings
+    //TODO Fix keyboard disappearing when keyboard is shown in vertical mode and user change orientation to horizontal
+    //TODO AlertDialog for note done button
 
     // Database Handler
     private DatabaseHandler dbHandler;
@@ -98,22 +101,13 @@ public class NoteActivity extends AppCompatActivity {
         // Auto-enable format menu panel when text is selected
         manageContextMenuBar(editText);
 
+        // Auto-enable soft keyboard when activity starts
+        toggleKeyboard(null);
+
         // disable keyboard suggestions
         // suggestions were causing formatting bugs by messing in spannable object
         disableKeyboardSuggestions(editText);
     }
-
-    /**
-     *  Disables soft keyboard text suggestions
-     *  Solution is caused by formatting text bugs
-     *  @param et EditText to disable suggestions for
-     */
-    private void disableKeyboardSuggestions(EditText et) {
-        et.setInputType(et.getInputType()
-                | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                | EditorInfo.TYPE_TEXT_VARIATION_FILTER);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -192,9 +186,34 @@ public class NoteActivity extends AppCompatActivity {
      * Method used to toggle soft keyboard
      * @param item MenuItem that handles that method in .xml android:OnClick
      */
-    public void toggleKeyboard(MenuItem item) {
+    public void toggleKeyboard(@Nullable MenuItem item) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    /**
+     * Method used to hide keyboard
+     */
+    private void hideSoftKeyboard() {
+        if (this.getCurrentFocus() != null) {
+            try {
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(this.getCurrentFocus().getApplicationWindowToken(), 0);
+            } catch (RuntimeException e) {
+                //ignore
+            }
+        }
+    }
+
+    /**
+     *  Disables soft keyboard text suggestions
+     *  Solution is caused by formatting text bugs
+     *  @param et EditText to disable suggestions for
+     */
+    private void disableKeyboardSuggestions(EditText et) {
+        et.setInputType(et.getInputType()
+                | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                | EditorInfo.TYPE_TEXT_VARIATION_FILTER);
     }
 
     /**
@@ -353,7 +372,7 @@ public class NoteActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         }
-
+        hideSoftKeyboard();
         Intent intent = new Intent(NoteActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
