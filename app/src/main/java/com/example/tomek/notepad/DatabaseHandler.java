@@ -116,6 +116,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String spannableAsHtml = Html.toHtml(note.getSpannable());
 
 
+
+
         ContentValues values = new ContentValues();
         values.put(KEY_SPANNABLE_NOTE, spannableAsHtml);
 

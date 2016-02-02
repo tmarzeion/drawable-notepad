@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog alertDialogCloseApp;
     private AlertDialog alertDialogDeleteAll;
 
+    // Note selected on menu
+    private Note selectedNote;
+
+    // Variables used to handle note list
+    private NoteAdapter noteAdapter;
+    private ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         dbHandler = new DatabaseHandler(getApplicationContext());
 
         // Add items to ListView
+        listView = (ListView) findViewById(R.id.listView);
         populateListView(dbHandler.getAllNotesAsArray());
+
+        // Assign listView to context menu
+        registerForContextMenu(listView);
 
         // Setup AlertDialogs
         alertDialogDeleteAll = initAlertDialogDeleteAllNotes();
@@ -134,11 +148,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public void deleteAllNotes() {
         dbHandler.clearAllNotes();
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-        Runtime.getRuntime().gc();
+        populateListView(dbHandler.getAllNotesAsArray());
+        noteAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -146,10 +157,44 @@ public class MainActivity extends AppCompatActivity {
      * @param allNotes Array of Notes containing all Notes in Database
      */
     private void populateListView(Note[] allNotes) {
-        NoteAdapter noteAdapter = new NoteAdapter(this,
+        noteAdapter = new NoteAdapter(this,
                 R.layout.listview_item_row, allNotes);
+        listView.setAdapter(noteAdapter);
+    }
 
-        ListView list = (ListView) findViewById(R.id.listView);
-        list.setAdapter(noteAdapter);
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        if (v.getId() == R.id.listView) {
+            ListView listView = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            selectedNote = (Note) listView.getItemAtPosition(acmi.position);
+            menu.setHeaderTitle("Choose action for note #" + selectedNote.getId());
+            MenuInflater inflater =getMenuInflater();
+            inflater.inflate(R.menu.context_menu_note_select, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch(item.getItemId())
+        {
+            case R.id.context_menu_delete:
+                dbHandler.deleteNote(selectedNote);
+                populateListView(dbHandler.getAllNotesAsArray());
+                noteAdapter.notifyDataSetChanged();
+                break;
+            case R.id.context_menu_edit:
+
+                Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("id", String.valueOf(selectedNote.getId()));
+                startActivity(intent);
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 }

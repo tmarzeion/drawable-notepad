@@ -110,6 +110,11 @@ public class NoteActivity extends AppCompatActivity {
         // disable keyboard suggestions
         // suggestions were causing formatting bugs by messing in spannable object
         disableKeyboardSuggestions(editText);
+
+        // Load note
+        if (noteID != -1) {
+            loadNote(noteID);
+        }
     }
 
     @Override
@@ -364,6 +369,15 @@ public class NoteActivity extends AppCompatActivity {
             spannable.setSpan(new AbsoluteSizeSpan(36, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         editText.setText(spannable);
+    }
+
+    /**
+     * Method used to add note text to EditText
+     * @param noteID
+     */
+    private void loadNote(int noteID) {
+        editText.setText(dbHandler.getNote(noteID).getSpannable());
+        System.out.println("DEBUG");
     }
 
     /**
