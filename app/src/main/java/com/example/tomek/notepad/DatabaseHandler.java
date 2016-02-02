@@ -42,7 +42,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public void clearAllNotes() {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM "+ TABLE_NOTES);
+        db.execSQL("DELETE FROM " + TABLE_NOTES);
     }
 
     /**
@@ -87,7 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public void deleteNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NOTES, KEY_ID + "=?", new String[] { String.valueOf(note.getId())});
+        db.delete(TABLE_NOTES, KEY_ID + "=?", new String[]{String.valueOf(note.getId())});
         db.close();
     }
 
@@ -126,7 +126,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Method used to get all notes in Database
      * @return ArrayList of Notes, containing all notes in Database
      */
-    public ArrayList<Note> getAllNotes() {
+    public ArrayList<Note> getAllNotesAsArrayList() {
         ArrayList<Note> notes = new ArrayList<>();
 
         SQLiteDatabase db = getWritableDatabase();
@@ -141,5 +141,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             while (cursor.moveToNext());
         }
         return notes;
+    }
+
+    /**
+     * Method used to get all notes in Database
+     * @return Array of Notes, containing all notes in Database
+     */
+    public Note[] getAllNotesAsArray() {
+        ArrayList<Note> notes = new ArrayList<>();
+
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NOTES, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Note note = new Note(Integer.parseInt(cursor.getString(0)),
+                        ((Spannable) Html.fromHtml(cursor.getString(1))));
+                notes.add(note);
+            }
+            while (cursor.moveToNext());
+        }
+
+        Note[] result = new Note[notes.size()];
+
+        for (int i = 0; i < notes.size(); i++) {
+            result[i] = notes.get(i);
+        }
+
+        return result;
     }
 }

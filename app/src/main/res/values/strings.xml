@@ -8,4 +8,5 @@
     <string name="action_toggle_keyboard">Show Keyboard</string>
     <string name="hint_write_note">Write Your note here…</string>
     <string name="action_delete_all">Delete all notes</string>
+    <string name="test">Test</string>
 </resources>

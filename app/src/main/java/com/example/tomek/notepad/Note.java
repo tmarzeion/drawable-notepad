@@ -57,4 +57,8 @@ public class Note {
     public String getTitle() {
         return title;
     }
+
+    public String getRawText() {
+        return rawText;
+    }
 }

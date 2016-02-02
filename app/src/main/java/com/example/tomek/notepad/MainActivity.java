@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         dbHandler = new DatabaseHandler(getApplicationContext());
 
         // Add items to ListView
-        populateListView(dbHandler.getAllNotes());
+        populateListView(dbHandler.getAllNotesAsArray());
 
         // Setup AlertDialogs
         alertDialogDeleteAll = initAlertDialogDeleteAllNotes();
@@ -145,17 +145,11 @@ public class MainActivity extends AppCompatActivity {
      * Method used to fill ListView
      * @param allNotes Array of Notes containing all Notes in Database
      */
-    private void populateListView(ArrayList<Note> allNotes) {
-
-        String[] noteTitles = new String[allNotes.size()];
-
-        for (int i = 0; i < allNotes.size(); i++) {
-            noteTitles[i] = allNotes.get(i).getTitle();
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                R.layout.list_view_item_main, noteTitles);
+    private void populateListView(Note[] allNotes) {
+        NoteAdapter noteAdapter = new NoteAdapter(this,
+                R.layout.listview_item_row, allNotes);
 
         ListView list = (ListView) findViewById(R.id.listView);
-        list.setAdapter(arrayAdapter);
+        list.setAdapter(noteAdapter);
     }
 }
