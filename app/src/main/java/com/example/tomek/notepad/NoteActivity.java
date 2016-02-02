@@ -66,8 +66,10 @@ public class NoteActivity extends AppCompatActivity {
     // Converted to HTML String in database
     private Spannable spannable;
 
-    // Alert dialog for back button
+    // Alert dialog for back button and save button
     AlertDialog alertDialogBackToPrevScreen;
+    AlertDialog alertDialogSaveNote;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class NoteActivity extends AppCompatActivity {
 
         // Setup AlertDialog
         alertDialogBackToPrevScreen = initAlertDialogBackToPrevScreen();
+        alertDialogSaveNote = initAlertDialogSaveNote();
 
         // get ID data from indent
         Intent intent = getIntent();
@@ -123,6 +126,31 @@ public class NoteActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Back to menu").setMessage("Quit without saving changes?");
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(NoteActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                Runtime.getRuntime().gc();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Nothing happens here...
+            }
+        });
+        return builder.create();
+    }
+
+    //TODO Implement .show() in code
+    /**
+     * Method used for first setup of done button AlertDialog
+     */
+    private AlertDialog initAlertDialogSaveNote() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save note").setMessage("Do you want to save changes?");
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
