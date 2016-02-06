@@ -74,7 +74,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         String spannableAsHtml = cursor.getString(1);
-        Spannable spannable = (Spannable) Html.fromHtml(spannableAsHtml);
+        // :)))))
+        Spannable spannable = (Spannable) Html.fromHtml(Html.toHtml(Html.fromHtml(spannableAsHtml)));
 
         db.close();
         cursor.close();

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -317,9 +318,6 @@ public class NoteActivity extends AppCompatActivity {
         else if (view.getTag().toString().equals("underline")) {
             spannable.setSpan(new UnderlineSpan(), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        else if (view.getTag().toString().equals("strikethrough")) {
-            spannable.setSpan(new StrikethroughSpan(), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
         else if (view.getTag().toString().equals("textBlack")) {
             spannable.setSpan(new ForegroundColorSpan(Color.BLACK), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -334,39 +332,6 @@ public class NoteActivity extends AppCompatActivity {
         }
         else if (view.getTag().toString().equals("textYellow")) {
             spannable.setSpan(new ForegroundColorSpan(Color.YELLOW), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("highlightWhite")) {
-            spannable.setSpan(new BackgroundColorSpan(238238238), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("highlightRed")) {
-            spannable.setSpan(new BackgroundColorSpan(Color.RED), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("highlightBlue")) {
-            spannable.setSpan(new BackgroundColorSpan(Color.BLUE), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("highlightGreen")) {
-            spannable.setSpan(new BackgroundColorSpan(Color.GREEN), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("highlightYellow")) {
-            spannable.setSpan(new BackgroundColorSpan(Color.YELLOW), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("10")) {
-            spannable.setSpan(new AbsoluteSizeSpan(10, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("12")) {
-            spannable.setSpan(new AbsoluteSizeSpan(12, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("14")) {
-            spannable.setSpan(new AbsoluteSizeSpan(14, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("18")) {
-            spannable.setSpan(new AbsoluteSizeSpan(18, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("24")) {
-            spannable.setSpan(new AbsoluteSizeSpan(24, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("36")) {
-            spannable.setSpan(new AbsoluteSizeSpan(36, true), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         editText.setText(spannable);
     }
