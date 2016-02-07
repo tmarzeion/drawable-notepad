@@ -108,10 +108,6 @@ public class NoteActivity extends AppCompatActivity {
         // Auto-enable soft keyboard when activity starts
         toggleKeyboard(null);
 
-        // disable keyboard suggestions
-        // suggestions were causing formatting bugs by messing in spannable object
-        disableKeyboardSuggestions(editText);
-
         // Load note
         if (noteID != -1) {
             loadNote(noteID);
@@ -228,16 +224,6 @@ public class NoteActivity extends AppCompatActivity {
                 //ignore
             }
         }
-    }
-
-    /**
-     *  Disables soft keyboard text suggestions
-     *  Solution is caused by formatting text bugs
-     *  @param et EditText to disable suggestions for
-     */
-    private void disableKeyboardSuggestions(EditText et) {
-        et.setInputType(et.getInputType()
-                | EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE);
     }
 
     /**

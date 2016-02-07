@@ -5,13 +5,16 @@
     android:id="@+id/note_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:paddingLeft="7dp"
+    android:paddingRight="7dp">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top|start"
+        android:inputType="textNoSuggestions|textMultiLine"
         android:id="@+id/editText"
         android:background="@null"
         android:hint="@string/hint_write_note"
