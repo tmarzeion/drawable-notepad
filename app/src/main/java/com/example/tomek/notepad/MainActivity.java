@@ -78,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        populateListView(dbHandler.getAllNotesAsArray());
+        noteAdapter.notifyDataSetChanged();
+    }
+
     /**
      * Method used for first setup of back button AlertDialog
      */

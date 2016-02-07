@@ -135,10 +135,7 @@ public class NoteActivity extends AppCompatActivity {
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Intent intent = new Intent(NoteActivity.this, MainActivity.class);
-                startActivity(intent);
                 finish();
-                Runtime.getRuntime().gc();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -160,10 +157,7 @@ public class NoteActivity extends AppCompatActivity {
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Intent intent = new Intent(NoteActivity.this, MainActivity.class);
-                startActivity(intent);
                 finish();
-                Runtime.getRuntime().gc();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -184,10 +178,7 @@ public class NoteActivity extends AppCompatActivity {
             alertDialogBackToPrevScreen.show();
         }
         else {
-            Intent intent = new Intent(NoteActivity.this, MainActivity.class);
-            startActivity(intent);
             finish();
-            Runtime.getRuntime().gc();
         }
     }
 
@@ -246,8 +237,7 @@ public class NoteActivity extends AppCompatActivity {
      */
     private void disableKeyboardSuggestions(EditText et) {
         et.setInputType(et.getInputType()
-                | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                | EditorInfo.TYPE_TEXT_VARIATION_FILTER);
+                | EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE);
     }
 
     /**
@@ -292,6 +282,10 @@ public class NoteActivity extends AppCompatActivity {
             }
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+
+
+
                 return true;
             }
         });
@@ -380,9 +374,6 @@ public class NoteActivity extends AppCompatActivity {
             }
         }
         hideSoftKeyboard();
-        Intent intent = new Intent(NoteActivity.this, MainActivity.class);
-        startActivity(intent);
         finish();
-        Runtime.getRuntime().gc();
     }
 }
