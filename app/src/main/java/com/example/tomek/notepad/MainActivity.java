@@ -1,6 +1,7 @@
 package com.example.tomek.notepad;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,14 +13,21 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Main Activity class
  */
 public class MainActivity extends AppCompatActivity {
+
+    //TODO make search icon auto-activated when clicked (and auto deactivated when 'x' is clicked)
+    //TODO refresh ListView's default note set when back button on search bar is clicked
 
     // Database Handler
     private DatabaseHandler dbHandler;
@@ -35,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     // Variables used to handle note list
     private NoteAdapter noteAdapter;
     private ListView listView;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("id", "-1");
@@ -81,6 +91,42 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Creating menu
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setQueryHint("Search notes...");
+
+        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                //TODO Possibly low optimization because of DB Queries on every click
+                Note[] allNotes = dbHandler.getAllNotesAsArray();
+                ArrayList<Note> filteredNotesArrayList= new ArrayList<>();
+                for (Note allNote : allNotes) {
+                    if (allNote.getRawText().contains(newText)) {
+                        filteredNotesArrayList.add(allNote);
+                    }
+                }
+
+                Note[] filteredNotes = new Note[filteredNotesArrayList.size()];
+                for (int i = 0; i < filteredNotes.length; i++) {
+                    filteredNotes[i] = filteredNotesArrayList.get(i);
+                }
+
+                populateListView(filteredNotes);
+                noteAdapter.notifyDataSetChanged();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Do nothing
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+
         return true;
     }
 
@@ -204,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
      * @param noteId
      */
     private void editNote(int noteId) {
+        hideSoftKeyboard();
         Intent intent = new Intent(MainActivity.this, NoteActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("id", String.valueOf(noteId));
@@ -211,12 +258,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Method used to fill ListView
-     * @param allNotes Array of Notes containing all Notes in Database
+     * Method used to hide keyboard
      */
-    private void populateListView(Note[] allNotes) {
+    private void hideSoftKeyboard() {
+        if (this.getCurrentFocus() != null) {
+            try {
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(this.getCurrentFocus().getApplicationWindowToken(), 0);
+            } catch (RuntimeException e) {
+                //ignore
+            }
+        }
+    }
+
+    /**
+     * Method used to fill ListView
+     * @param note Array of Notes containing all Notes in Database
+     */
+    private void populateListView(Note[] note) {
         noteAdapter = new NoteAdapter(this,
-                R.layout.listview_item_row, allNotes);
+                R.layout.listview_item_row, note);
         listView.setAdapter(noteAdapter);
     }
 
