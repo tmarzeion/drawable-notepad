@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     // Alert dialogs for back button and delete all notes button
     private AlertDialog alertDialogCloseApp;
     private AlertDialog alertDialogDeleteAll;
+    private AlertDialog alertDialogDeleteSingleNote;
 
     // Note selected on menu
     private Note selectedNote;
@@ -141,10 +142,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Method used for setup of delete single note button AlertDialog
+     */
+    private AlertDialog setupAlertDialogDeleteSingleNote() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure?").setTitle("Delete note #" + selectedNote.getId());
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dbHandler.deleteNote(selectedNote);
+                populateListView(dbHandler.getAllNotesAsArray());
+                noteAdapter.notifyDataSetChanged();
+                Toast.makeText(MainActivity.this, "Note #" + selectedNote.getId() + " deleted",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        return builder.create();
+    }
+    /**
      * Method used to show AlertDialog when delete all notes button is clicked
      */
-    public void showAlertDialog(MenuItem menuItem) {
+    public void showAlertDialogDeleteAllNotes(MenuItem menuItem) {
         alertDialogDeleteAll.show();
+    }
+
+    /**
+     * Method used to show AlertDialog when delete note button is clicked
+     */
+    private void showAlertDialogDeleteSingleNote() {
+        alertDialogDeleteSingleNote.show();
     }
 
     /**
@@ -207,9 +241,8 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId())
         {
             case R.id.context_menu_delete:
-                dbHandler.deleteNote(selectedNote);
-                populateListView(dbHandler.getAllNotesAsArray());
-                noteAdapter.notifyDataSetChanged();
+                alertDialogDeleteSingleNote = setupAlertDialogDeleteSingleNote();
+                showAlertDialogDeleteSingleNote();
                 break;
             case R.id.context_menu_edit:
                 editNote(selectedNote.getId());
