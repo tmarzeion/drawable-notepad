@@ -4,6 +4,13 @@
     tools:context="com.example.tomek.notepad.NoteActivity">
 
     <item
+        android:id="@+id/action_voice_input"
+        android:icon="@drawable/ic_keyboard_voice_24dp"
+        android:title="@string/action_voice"
+        android:onClick="speakButtonClicked"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_toggle_keyboard"
         android:icon="@drawable/ic_keyboard_24px"
         android:title="@string/action_toggle_keyboard"

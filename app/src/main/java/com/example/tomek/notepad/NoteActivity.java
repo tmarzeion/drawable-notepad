@@ -8,16 +8,16 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.BackgroundColorSpan;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.view.ActionMode;
@@ -27,11 +27,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Note Activity class that handles:
@@ -45,6 +46,14 @@ public class NoteActivity extends AppCompatActivity {
     //TODO Using @String res instead of hardcoded strings
     //TODO Fix keyboard disappearing when keyboard is shown in vertical mode and user change orientation to horizontal
     //TODO AlertDialog for note done button
+
+    //TODO fix bug that adds two empty lines into loaded note
+    //TODO Enable choice of voice matches?
+    //TODO Voice input text from cursor position
+
+
+    // Request code for voice input
+    private static final int REQUEST_CODE = 1234;
 
     // Database Handler
     private DatabaseHandler dbHandler;
@@ -270,8 +279,6 @@ public class NoteActivity extends AppCompatActivity {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
 
-
-
                 return true;
             }
         });
@@ -361,5 +368,51 @@ public class NoteActivity extends AppCompatActivity {
         }
         hideSoftKeyboard();
         finish();
+    }
+
+    /**
+     * Handle voice button click
+     */
+    public void speakButtonClicked(MenuItem menuItem) {
+        startVoiceRecognitionActivity();
+    }
+
+    /**
+     * Start the voice recognition activity.
+     */
+    private void startVoiceRecognitionActivity()
+    {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //TODO String res
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.voice_hint);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    /**
+     * Handle the results from the voice recognition
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
+        {
+            ArrayList<String> matches = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS);
+
+            if (matches.size() > 0) {
+                if (editText.getText().toString().length() == 0) {
+                    editText.setText(matches.get(0));
+                    editText.setSelection(editText.getText().toString().length());
+                }
+                else {
+                    Spanned spanText = ((SpannedString) TextUtils.concat(editText.getText()," " + matches.get(0)));
+                    editText.setText(spanText);
+                    editText.setSelection(editText.getText().toString().length());
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
