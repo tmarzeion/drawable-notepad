@@ -13,10 +13,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import java.util.ArrayList;
 
 /**
  * Main Activity class
@@ -67,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("id", "-1");
                 startActivity(intent);
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedNote = ((Note) parent.getAdapter().getItem(position));
+                editNote(selectedNote.getId());
             }
         });
     }
@@ -161,6 +166,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Method used to enter note edition mode
+     * @param noteId
+     */
+    private void editNote(int noteId) {
+        Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("id", String.valueOf(noteId));
+        startActivity(intent);
+    }
+
+    /**
      * Method used to fill ListView
      * @param allNotes Array of Notes containing all Notes in Database
      */
@@ -196,11 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 noteAdapter.notifyDataSetChanged();
                 break;
             case R.id.context_menu_edit:
-
-                Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("id", String.valueOf(selectedNote.getId()));
-                startActivity(intent);
+                editNote(selectedNote.getId());
                 break;
         }
         return super.onContextItemSelected(item);
