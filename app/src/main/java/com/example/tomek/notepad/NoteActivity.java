@@ -22,6 +22,7 @@ import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.view.ActionMode;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -329,7 +330,11 @@ public class NoteActivity extends AppCompatActivity {
      */
     private void loadNote(int noteID) {
         editText.setText(dbHandler.getNote(noteID).getSpannable());
-        System.out.println("DEBUG");
+        editText.setSelection(editText.getText().toString().length());
+
+        // Poker face :)
+        editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+        editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
     }
 
     /**
