@@ -337,7 +337,7 @@ public class NoteActivity extends AppCompatActivity {
      * Handled by "Done button"
      */
     //TODO Disable keyboard if present
-    public void saveOrUpdateNote(MenuItem menuItem) {
+    public void saveOrUpdateNote(@Nullable View v) {
 
         spannable = editText.getText();
 
