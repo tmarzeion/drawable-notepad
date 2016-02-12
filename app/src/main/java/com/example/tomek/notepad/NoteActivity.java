@@ -278,9 +278,7 @@ public class NoteActivity extends AppCompatActivity {
             }
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-
-                return true;
+                return false;
             }
         });
     }
