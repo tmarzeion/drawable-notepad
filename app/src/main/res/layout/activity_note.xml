@@ -37,16 +37,7 @@
             android:layout_marginBottom="5dp" />
 
         <include layout="@layout/content_text_format" />
-
         <include layout="@layout/content_draw_panel" />
 
-
     </LinearLayout>
-
-    <!-- TODO: Draw panel dimension = edittext dimensions! -->
-
-
-
-
-
 </RelativeLayout>

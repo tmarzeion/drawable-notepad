@@ -57,10 +57,6 @@ public class DrawingView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-
-
-
-        //TODO There may be solution for disappearing painting when keyboard and panel is ON
         if (canvasBitmap == null) {
             canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             drawCanvas = new Canvas(canvasBitmap);

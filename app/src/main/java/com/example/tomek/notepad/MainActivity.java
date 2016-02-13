@@ -26,9 +26,6 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
-    //TODO make search icon auto-activated when clicked (and auto deactivated when 'x' is clicked)
-    //TODO refresh ListView's default note set when back button on search bar is clicked
-
     // Database Handler
     private DatabaseHandler dbHandler;
 

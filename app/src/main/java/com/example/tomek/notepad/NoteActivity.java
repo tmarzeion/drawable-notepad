@@ -46,14 +46,13 @@ import java.util.ArrayList;
 public class NoteActivity extends AppCompatActivity {
 
     //TODO Using @String res instead of hardcoded strings
-    //TODO Fix keyboard disappearing when keyboard is shown in vertical mode and user change orientation to horizontal
-    //TODO AlertDialog for note done button
-
-    //TODO fix bug that adds two empty lines into loaded note
+    //TODO fix bug that adds two empty lines into loaded note (fixed like a retard)
     //TODO Enable choice of voice matches?
     //TODO Voice input text from cursor position
-
-    //TODO TEST!!! $#$$$$
+    //TODO auto-save on back button when editing note (better user experience)
+    //TODO save blank note (when there is picture on it)
+    //TODO async task (to reduce save note lag)
+    //TODO add Javadoc
 
     // Draw mode booleans
     private boolean isDrawModeOn;
@@ -141,8 +140,9 @@ public class NoteActivity extends AppCompatActivity {
         // Auto-enable format menu panel when text is selected
         manageContextMenuBar(editText);
 
+        // Feature Disabled
         // Auto-enable soft keyboard when activity starts
-        toggleKeyboard(null);
+        //toggleKeyboard(null);
 
         // Load note
         if (noteID != -1) {
@@ -415,7 +415,6 @@ public class NoteActivity extends AppCompatActivity {
      * Method used for Saving/Updating/Deleting note with special conditions
      * Handled by "Done button"
      */
-    //TODO Disable keyboard if present
     public void saveOrUpdateNote(@Nullable MenuItem menu) {
 
         spannable = editText.getText();
@@ -464,7 +463,6 @@ public class NoteActivity extends AppCompatActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        //TODO String res
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.voice_hint);
         startActivityForResult(intent, REQUEST_CODE);
     }
