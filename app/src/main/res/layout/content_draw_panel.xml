@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/formatTextSlider"
+    android:id="@+id/drawPanelSlider"
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:layout_alignParentBottom="true"
@@ -9,11 +9,9 @@
     android:orientation="vertical"
     android:visibility="gone">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView2"
         android:layout_gravity="center_horizontal" >
 
         <LinearLayout
@@ -21,13 +19,56 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Draw options:"
+            android:layout_marginTop="6dp"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal" >
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete_24px"
+                android:layout_marginStart="10dp"
+                android:onClick="wipeCanvas"
+                android:tint="@color/textFormatBlack" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_draw_24dp"
+                android:layout_marginStart="10dp"
+                android:tag="paint"
+                android:onClick="eraseOrPaintMode"
+                android:tint="@color/textFormatBlack" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_erase_24px"
+                android:layout_marginStart="10dp"
+                android:tag="erase"
+                android:onClick="eraseOrPaintMode"
+                android:tint="@color/textFormatBlack" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Text color:"
-                android:id="@+id/textView2"
+                android:text="Brush color:"
                 android:layout_marginTop="6dp"
                 android:layout_gravity="center_horizontal"
                 android:textSize="20sp"
@@ -43,51 +84,46 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_format_text_color_24px"
-                    android:onClick="formatTextActionPerformed"
+                    android:src="@drawable/ic_brush_color_24dp"
                     android:layout_marginStart="10dp"
-                    android:id="@+id/imageButtonTextColorBlack"
-                    android:tag="textBlack"
+                    android:onClick="changeColor"
+                    android:tag="black"
                     android:tint="@color/textFormatBlack" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonTextColorRed"
-                    android:src="@drawable/ic_format_text_color_24px"
-                    android:onClick="formatTextActionPerformed"
-                    android:tag="textRed"
+                    android:src="@drawable/ic_brush_color_24dp"
                     android:layout_marginStart="10dp"
+                    android:onClick="changeColor"
+                    android:tag="red"
                     android:tint="@color/textFormatRed" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonTextColorBlue"
-                    android:src="@drawable/ic_format_text_color_24px"
-                    android:onClick="formatTextActionPerformed"
-                    android:tag="textBlue"
+                    android:src="@drawable/ic_brush_color_24dp"
                     android:layout_marginStart="10dp"
+                    android:onClick="changeColor"
+                    android:tag="blue"
                     android:tint="@color/textFormatBlue" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonTextColorGreen"
-                    android:src="@drawable/ic_format_text_color_24px"
-                    android:onClick="formatTextActionPerformed"
-                    android:tag="textGreen"
+                    android:src="@drawable/ic_brush_color_24dp"
                     android:layout_marginStart="10dp"
+                    android:onClick="changeColor"
+                    android:tag="green"
                     android:tint="@color/textFormatGreen" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonTextColorYellow"
-                    android:src="@drawable/ic_format_text_color_24px"
-                    android:onClick="formatTextActionPerformed"
-                    android:tag="textYellow"
+                    android:src="@drawable/ic_brush_color_24dp"
                     android:layout_marginStart="10dp"
+                    android:onClick="changeColor"
+                    android:tag="yellow"
                     android:tint="@color/textFormatYellow" />
 
             </LinearLayout>
@@ -96,8 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Style:"
-                android:id="@+id/textView4"
+                android:text="Brush size:"
                 android:layout_marginTop="6dp"
                 android:layout_gravity="center_horizontal"
                 android:textSize="20sp"
@@ -113,34 +148,31 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonBold"
-                    android:src="@drawable/ic_format_bold_24px"
-                    android:onClick="formatTextActionPerformed"
-                    android:tag="bold"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
+                    android:src="@drawable/ic_brush_small_24px"
+                    android:layout_marginStart="10dp"
+                    android:tag="small"
+                    android:onClick="changeBrushSize"
+                    android:tint="@color/textFormatBlack" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonItalic"
-                    android:src="@drawable/ic_format_italic_24px"
-                    android:onClick="formatTextActionPerformed"
-                    android:tag="italic"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
+                    android:src="@drawable/ic_brush_medium_24px"
+                    android:layout_marginStart="10dp"
+                    android:tag="medium"
+                    android:onClick="changeBrushSize"
+                    android:tint="@color/textFormatBlack" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButtonUnderline"
-                    android:src="@drawable/ic_format_underlined_24px"
-                    android:onClick="formatTextActionPerformed"
-                    android:tag="underline"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
+                    android:src="@drawable/ic_brush_big_24px"
+                    android:layout_marginStart="10dp"
+                    android:tag="large"
+                    android:onClick="changeBrushSize"
+                    android:tint="@color/textFormatBlack" />
 
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/note_layout"
@@ -9,31 +9,44 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp">
 
-    <EditText
+    <com.example.tomek.notepad.DrawingView
+        android:id="@+id/drawing"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="top|start"
-        android:inputType="textNoSuggestions|textMultiLine"
-        android:id="@+id/editText"
-        android:background="@null"
-        android:hint="@string/hint_write_note"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/sliderMenu"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/colorAccent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:id="@+id/contentEdiText"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top|start"
+            android:inputType="textNoSuggestions|textMultiLine"
+            android:id="@+id/editText"
+            android:background="@null"
+            android:hint="@string/hint_write_note"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
 
         <include layout="@layout/content_text_format" />
 
+        <include layout="@layout/content_draw_panel" />
+
+
     </LinearLayout>
-</LinearLayout>
+
+    <!-- TODO: Draw panel dimension = edittext dimensions! -->
+
+
+
+
+
+</RelativeLayout>

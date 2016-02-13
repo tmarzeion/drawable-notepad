@@ -25,6 +25,7 @@ import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -52,6 +53,20 @@ public class NoteActivity extends AppCompatActivity {
     //TODO Enable choice of voice matches?
     //TODO Voice input text from cursor position
 
+    //TODO TEST!!! $#$$$$
+
+    // Draw mode booleans
+    private boolean isDrawModeOn;
+    private boolean isTextModeOn;
+
+    // Drawing canvas
+    private DrawingView drawingView;
+
+    // Brush sizes
+    private final float
+            smallBrush = 5,
+            mediumBrush = 10,
+            largeBrush = 20;
 
     // Request code for voice input
     private static final int REQUEST_CODE = 1234;
@@ -63,8 +78,9 @@ public class NoteActivity extends AppCompatActivity {
     // Default 0.3, Values  0 < x < 1
     private static final double MENU_MARGIN_RELATIVE_MODIFIER = 0.3;
 
-    // format text panel container
+    // format text and draw panel container
     private LinearLayout mSliderLayout;
+    private LinearLayout mDrawLayout;
 
     // Actual Note ID
     // (is -1 when it's new note)
@@ -89,11 +105,21 @@ public class NoteActivity extends AppCompatActivity {
 
         // Set Views fields values
         editText = ((EditText) findViewById(R.id.editText));
-        mSliderLayout = (LinearLayout) findViewById(R.id.sliderMenu);
+        mSliderLayout = (LinearLayout) findViewById(R.id.formatTextSlider);
+        mDrawLayout = (LinearLayout) findViewById(R.id.drawPanelSlider);
 
-        // Get params for format text panel
-        ViewGroup.LayoutParams params = mSliderLayout.getLayoutParams();
-        params.height = calculateMenuMargin();
+        drawingView = ((DrawingView) findViewById(R.id.drawing));
+
+        // set boolean values
+        isDrawModeOn = false;
+        isTextModeOn = true;
+
+
+        // Get params for format text panel and draw panel
+        ViewGroup.LayoutParams paramsTextFormat = mSliderLayout.getLayoutParams();
+        paramsTextFormat.height = calculateMenuMargin();
+        ViewGroup.LayoutParams paramsDrawPanel = mDrawLayout.getLayoutParams();
+        paramsDrawPanel.height = calculateMenuMargin();
 
         // Create DatabaseHandler
         dbHandler = new DatabaseHandler(getApplicationContext());
@@ -122,6 +148,20 @@ public class NoteActivity extends AppCompatActivity {
         if (noteID != -1) {
             loadNote(noteID);
         }
+
+        editText.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isDrawModeOn) {
+                    drawingView.onTouchEvent(event);
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        });
     }
 
     @Override
@@ -152,7 +192,6 @@ public class NoteActivity extends AppCompatActivity {
         return builder.create();
     }
 
-    //TODO Implement .show() in code
     /**
      * Method used for first setup of done button AlertDialog
      */
@@ -192,13 +231,49 @@ public class NoteActivity extends AppCompatActivity {
      * Method used to toggle format text panel
      * @param item MenuItem that handles that method in .xml android:OnClick
      */
-    public void toggleMenu(MenuItem item) {
-        if (findViewById(R.id.sliderMenu).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.sliderMenu).setVisibility(View.GONE);
+    public void toggleTextFormatMenu(MenuItem item) {
+        if (findViewById(R.id.formatTextSlider).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.formatTextSlider).setVisibility(View.GONE);
         } else {
-            findViewById(R.id.sliderMenu).setVisibility(View.VISIBLE);
+            if (findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE) {
+                findViewById(R.id.drawPanelSlider).setVisibility(View.GONE);
+            }
+            findViewById(R.id.formatTextSlider).setVisibility(View.VISIBLE);
         }
+
+        // After changes:
+        setDrawModeOn(findViewById(R.id.formatTextSlider).getVisibility() != View.VISIBLE
+                && findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE);
     }
+
+    /**
+     * Method used to toggle draw menu panel
+     * @param item MenuItem that handles that method in .xml android:OnClick
+     */
+    public void toggleDrawMenu(MenuItem item) {
+        if (findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.drawPanelSlider).setVisibility(View.GONE);
+        } else {
+            if (findViewById(R.id.formatTextSlider).getVisibility() == View.VISIBLE) {
+                findViewById(R.id.formatTextSlider).setVisibility(View.GONE);
+            }
+            findViewById(R.id.drawPanelSlider).setVisibility(View.VISIBLE);
+        }
+
+        // After changes:
+        setDrawModeOn(findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE);
+
+    }
+
+    /**
+     * Method used to set draw mode on
+     * Draw mode is relative to text mode (may be useful in later upates)
+     */
+    private void setDrawModeOn(boolean isOn) {
+        isDrawModeOn = isOn;
+        isTextModeOn = !isOn;
+    }
+
 
     /**
      * Method that calculates space left for EditText when format text panel is Visible
@@ -264,15 +339,15 @@ public class NoteActivity extends AppCompatActivity {
             }
 
             public void onDestroyActionMode(ActionMode mode) {
-                if (findViewById(R.id.sliderMenu).getVisibility() == View.VISIBLE) {
-                    findViewById(R.id.sliderMenu).setVisibility(View.GONE);
+                if (findViewById(R.id.formatTextSlider).getVisibility() == View.VISIBLE) {
+                    findViewById(R.id.formatTextSlider).setVisibility(View.GONE);
                 }
             }
 
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 
-                if (findViewById(R.id.sliderMenu).getVisibility() == View.GONE) {
-                    findViewById(R.id.sliderMenu).setVisibility(View.VISIBLE);
+                if (findViewById(R.id.formatTextSlider).getVisibility() == View.GONE) {
+                    findViewById(R.id.formatTextSlider).setVisibility(View.VISIBLE);
                 }
                 return true;
             }
@@ -417,5 +492,55 @@ public class NoteActivity extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * Method used to change drawing color
+     */
+    public void changeColor (View v) {
+
+        if (v.getTag().toString().equals("black")) {
+            drawingView.setPaintColor(Color.BLACK);
+        }
+        else if (v.getTag().toString().equals("red")) {
+            drawingView.setPaintColor(Color.RED);
+        }
+        else if (v.getTag().toString().equals("blue")) {
+            drawingView.setPaintColor(Color.BLUE);
+        }
+        else if (v.getTag().toString().equals("green")) {
+            drawingView.setPaintColor(Color.GREEN);
+        }
+        else if (v.getTag().toString().equals("yellow")) {
+            drawingView.setPaintColor(Color.YELLOW);
+        }
+    }
+
+    /**
+     * Method used to change brush size
+     */
+    public void changeBrushSize (View v ) {
+
+        if (v.getTag().toString().equals("small")) {
+            drawingView.setBrushSize(smallBrush);
+        }
+        else if (v.getTag().toString().equals("medium")) {
+            drawingView.setBrushSize(mediumBrush);
+        }
+        else if (v.getTag().toString().equals("large")) {
+            drawingView.setBrushSize(largeBrush);
+        }
+    }
+
+    /**
+     * Method used to change erase mode
+     * Handled by erase and paint button
+     */
+    public void eraseOrPaintMode(View v) {
+        drawingView.setErase(v.getTag().toString().equals("erase"));
+    }
+
+    public void wipeCanvas(View v) {
+        drawingView.startNew();
     }
 }

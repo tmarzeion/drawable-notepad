@@ -21,9 +21,15 @@
         android:id="@+id/action_text_format"
         android:icon="@drawable/ic_text_format_24px"
         android:title="@string/action_text_format"
-        android:onClick="toggleMenu"
+        android:onClick="toggleTextFormatMenu"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/action_draw"
+        android:icon="@drawable/ic_draw_24dp"
+        android:title="@string/action_draw"
+        android:onClick="toggleDrawMenu"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_done"
         android:icon="@drawable/ic_done_24dp"

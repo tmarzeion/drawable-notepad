@@ -20,6 +20,7 @@
         </activity>
         <activity
             android:name=".NoteActivity"
+            android:screenOrientation="portrait"
             android:label="@string/add_note" />
     </application>
 

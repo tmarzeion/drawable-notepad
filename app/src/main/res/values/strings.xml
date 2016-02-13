@@ -11,4 +11,14 @@
     <string name="action_delete_all">Delete all notes</string>
     <string name="test">Test</string>
     <string name="voice_hint">Speak now</string>
+
+
+
+    <string name="eraseAll">Erase All</string>
+    <string name="brush">Brush</string>
+    <string name="erase">Erase</string>
+    <string name="paint">Paint</string>
+    <string name="action_draw">Draw</string>
+
+
 </resources>
