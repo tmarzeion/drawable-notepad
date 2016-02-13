@@ -1,5 +1,6 @@
 package com.example.tomek.notepad;
 
+import android.graphics.Bitmap;
 import android.text.Spannable;
 
 /**
@@ -16,10 +17,14 @@ public class Note {
     // Raw text used to make titles
     private String rawText;
 
+    //Painting
+    private Bitmap mImage;
 
-    public Note(int id, Spannable spannable) {
+
+    public Note(int id, Spannable spannable, Bitmap image) {
         mId = id;
         mSpannable = spannable;
+        mImage = image;
         rawText = mSpannable.toString();
     }
 
@@ -33,5 +38,9 @@ public class Note {
 
     public String getRawText() {
         return rawText;
+    }
+
+    public Bitmap getImage() {
+        return mImage;
     }
 }

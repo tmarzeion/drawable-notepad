@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spannable;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_NOTES = "notes";
     private static final String KEY_ID = "id";
     private static final String KEY_SPANNABLE_NOTE = "serializedSpannableNote";
+    private static final String KEY_IMAGE = "image";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,7 +30,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NOTES + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_SPANNABLE_NOTE + " TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NOTES + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_SPANNABLE_NOTE + " TEXT, "
+                + KEY_IMAGE + " BLOB)");
     }
 
     @Override
@@ -54,6 +59,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String spannableAsHtml = Html.toHtml(note.getSpannable());
         ContentValues values = new ContentValues();
         values.put(KEY_SPANNABLE_NOTE, spannableAsHtml);
+        values.put(KEY_IMAGE, BitmapConverter.getBytes(note.getImage()));
         db.insert(TABLE_NOTES, null, values);
         db.close();
     }
@@ -66,7 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Note getNote(int id) {
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID, KEY_SPANNABLE_NOTE}, KEY_ID + "=?",
+        Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID, KEY_SPANNABLE_NOTE, KEY_IMAGE}, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (cursor != null) {
@@ -77,9 +83,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // :)))))
         Spannable spannable = (Spannable) Html.fromHtml(Html.toHtml(Html.fromHtml(spannableAsHtml)));
 
+        Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+
         db.close();
         cursor.close();
-        return new Note(id, spannable);
+        return new Note(id, spannable, image);
     }
 
     /**
@@ -116,10 +124,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String spannableAsHtml = Html.toHtml(note.getSpannable());
 
-
-
-
         ContentValues values = new ContentValues();
+        values.put(KEY_IMAGE, BitmapConverter.getBytes(note.getImage()));
         values.put(KEY_SPANNABLE_NOTE, spannableAsHtml);
 
         return db.update(TABLE_NOTES, values, KEY_ID + "=?", new String[]{String.valueOf(note.getId())});
@@ -138,7 +144,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Note note = new Note(Integer.parseInt(cursor.getString(0)),
-                        ((Spannable) Html.fromHtml(cursor.getString(1))));
+                        (Spannable) Html.fromHtml(cursor.getString(1)),
+                        BitmapConverter.getImage(cursor.getBlob(2)));
                 notes.add(note);
             }
             while (cursor.moveToNext());
@@ -146,6 +153,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return notes;
     }
 
+    //TODO possible not returning full notes (cursor issues)
     /**
      * Method used to get all notes in Database
      * @return Array of Notes, containing all notes in Database
@@ -159,7 +167,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Note note = new Note(Integer.parseInt(cursor.getString(0)),
-                        ((Spannable) Html.fromHtml(cursor.getString(1))));
+                        (Spannable) Html.fromHtml(cursor.getString(1)),
+                        BitmapConverter.getImage(cursor.getBlob(2)));
                 notes.add(note);
             }
             while (cursor.moveToNext());

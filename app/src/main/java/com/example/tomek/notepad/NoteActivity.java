@@ -404,6 +404,7 @@ public class NoteActivity extends AppCompatActivity {
     private void loadNote(int noteID) {
         editText.setText(dbHandler.getNote(noteID).getSpannable());
         editText.setSelection(editText.getText().toString().length());
+        drawingView.setBitmap(dbHandler.getNote(noteID).getImage());
 
         // Poker face :)
         editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
@@ -421,14 +422,14 @@ public class NoteActivity extends AppCompatActivity {
 
         if (editText.getText().length() != 0) {
             if (noteID == -1) {
-                Note note = new Note (dbHandler.getNoteCount(), spannable);
+                Note note = new Note (dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap());
                 dbHandler.createNote(note);
 
                 Toast.makeText(NoteActivity.this, "Note created",
                         Toast.LENGTH_SHORT).show();
             }
             else {
-                Note note = new Note (noteID, spannable);
+                Note note = new Note (noteID, spannable, drawingView.getCanvasBitmap());
                 dbHandler.updateNote(note);
 
                 Toast.makeText(NoteActivity.this, "Note updated",
@@ -437,7 +438,7 @@ public class NoteActivity extends AppCompatActivity {
         } else {
             if (noteID != -1) {
 
-                Note note = new Note (noteID, spannable);
+                Note note = new Note (noteID, spannable, drawingView.getCanvasBitmap());
                 dbHandler.deleteNote(note);
 
                 Toast.makeText(NoteActivity.this, "Note is blank. Deleting note...",

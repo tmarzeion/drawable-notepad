@@ -50,13 +50,26 @@ public class DrawingView extends View {
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
 
         canvasPaint = new Paint(Paint.DITHER_FLAG);
+
+
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        drawCanvas = new Canvas(canvasBitmap);
+
+
+
+        //TODO There may be solution for disappearing painting when keyboard and panel is ON
+        if (canvasBitmap == null) {
+            canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            drawCanvas = new Canvas(canvasBitmap);
+        }
+        else {
+            canvasBitmap = Bitmap.createBitmap(canvasBitmap);
+            canvasBitmap = canvasBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            drawCanvas = new Canvas(canvasBitmap);
+        }
     }
 
     @Override
@@ -116,5 +129,13 @@ public class DrawingView extends View {
         else {
             drawPaint.setXfermode(null);
         }
+    }
+
+    public Bitmap getCanvasBitmap() {
+        return canvasBitmap;
+    }
+
+    public void setBitmap(Bitmap bmp) {
+        canvasBitmap = bmp;
     }
 }
