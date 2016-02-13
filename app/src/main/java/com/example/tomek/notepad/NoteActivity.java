@@ -93,7 +93,6 @@ public class NoteActivity extends AppCompatActivity {
     private Spannable spannable;
 
     // Alert dialog for back button and save button
-    AlertDialog alertDialogBackToPrevScreen;
     AlertDialog alertDialogSaveNote;
 
 
@@ -127,7 +126,6 @@ public class NoteActivity extends AppCompatActivity {
         spannable = editText.getText();
 
         // Setup AlertDialog
-        alertDialogBackToPrevScreen = initAlertDialogBackToPrevScreen();
         alertDialogSaveNote = initAlertDialogSaveNote();
 
         // get ID data from indent
@@ -172,27 +170,6 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     /**
-     * Method used for first setup of back button AlertDialog
-     */
-    private AlertDialog initAlertDialogBackToPrevScreen() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Back to menu").setMessage("Quit without saving changes?");
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Nothing happens here...
-            }
-        });
-        return builder.create();
-    }
-
-    /**
      * Method used for first setup of done button AlertDialog
      */
     private AlertDialog initAlertDialogSaveNote() {
@@ -219,12 +196,7 @@ public class NoteActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        if (editText.getText().toString().length() != 0) {
-            alertDialogBackToPrevScreen.show();
-        }
-        else {
-            finish();
-        }
+        saveOrUpdateNote(null);
     }
 
     /**
@@ -419,31 +391,21 @@ public class NoteActivity extends AppCompatActivity {
 
         spannable = editText.getText();
 
-        if (editText.getText().length() != 0) {
-            if (noteID == -1) {
-                Note note = new Note (dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap());
-                dbHandler.createNote(note);
+        if (noteID == -1) {
+            Note note = new Note (dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap());
+            dbHandler.createNote(note);
 
-                Toast.makeText(NoteActivity.this, "Note created",
-                        Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Note note = new Note (noteID, spannable, drawingView.getCanvasBitmap());
-                dbHandler.updateNote(note);
-
-                Toast.makeText(NoteActivity.this, "Note updated",
-                        Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            if (noteID != -1) {
-
-                Note note = new Note (noteID, spannable, drawingView.getCanvasBitmap());
-                dbHandler.deleteNote(note);
-
-                Toast.makeText(NoteActivity.this, "Note is blank. Deleting note...",
-                        Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(NoteActivity.this, "Note created",
+                    Toast.LENGTH_SHORT).show();
         }
+        else {
+            Note note = new Note (noteID, spannable, drawingView.getCanvasBitmap());
+            dbHandler.updateNote(note);
+
+            Toast.makeText(NoteActivity.this, "Note updated",
+                    Toast.LENGTH_SHORT).show();
+        }
+
         hideSoftKeyboard();
         finish();
     }

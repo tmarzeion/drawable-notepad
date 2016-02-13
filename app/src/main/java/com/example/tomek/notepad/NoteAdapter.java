@@ -2,6 +2,7 @@ package com.example.tomek.notepad;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,15 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 
         Note note = data[position];
         holder.noteTitle.setText("Note No: " + note.getId());
-        holder.noteContent.setText(note.getRawText());
+
+        String title = note.getRawText();
+        if (title.length() != 0) {
+            holder.noteContent.setText(note.getRawText());
+        }
+        else {
+            //TODO Finding out if there is picture on note
+            holder.noteContent.setText("INFO: Note has no text");
+        }
 
         return row;
     }
