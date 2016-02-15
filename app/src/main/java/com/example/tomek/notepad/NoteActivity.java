@@ -50,18 +50,13 @@ public class NoteActivity extends AppCompatActivity {
     //TODO fix bug that adds two empty lines into loaded note (fixed like a retard)
     //TODO Enable choice of voice matches?
     //TODO Voice input text from cursor position
-    //TODO async task (to reduce save note lag)
     //TODO add Javadoc
     //TODO Delete Done button, add back button to left side of toolbar
     //TODO Add Background function to note edit, then display this background on ListView
     //TODO Clicking on "New note" on note edit activity changes note title
     //TODO Default note title system (handle blank text notes, with pictures on it)
     //TODO Toggle panels icons color
-
     //TODO Disable text/draw panel when back button is clicked. Prevents user from saving note when tries to close panel with back button
-
-    //Calling activity
-    Activity callingActivity;
 
     // Draw mode booleans
     private boolean isDrawModeOn;
@@ -114,13 +109,11 @@ public class NoteActivity extends AppCompatActivity {
         editText = ((EditText) findViewById(R.id.editText));
         mSliderLayout = (LinearLayout) findViewById(R.id.formatTextSlider);
         mDrawLayout = (LinearLayout) findViewById(R.id.drawPanelSlider);
-
         drawingView = ((DrawingView) findViewById(R.id.drawing));
 
         // set boolean values
         isDrawModeOn = false;
         isTextModeOn = true;
-
 
         // Get params for format text panel and draw panel
         ViewGroup.LayoutParams paramsTextFormat = mSliderLayout.getLayoutParams();
@@ -156,6 +149,7 @@ public class NoteActivity extends AppCompatActivity {
             loadNote(noteID);
         }
 
+        // Handling drawingView's onTouchListener via EditText onTouchListener
         editText.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -201,7 +195,6 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Method that Overrides back button behavior
-     * When back button is pressed it shows "back button" AlertDialog
      */
     @Override
     public void onBackPressed() {
@@ -212,38 +205,46 @@ public class NoteActivity extends AppCompatActivity {
      * Method used to toggle format text panel
      * @param item MenuItem that handles that method in .xml android:OnClick
      */
-    public void toggleTextFormatMenu(MenuItem item) {
-        if (findViewById(R.id.formatTextSlider).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.formatTextSlider).setVisibility(View.GONE);
+    public void toggleTextFormatMenu(@Nullable MenuItem item) {
+
+        View formatTextSliderView = findViewById(R.id.formatTextSlider);
+        View drawPanelSliderView = findViewById(R.id.drawPanelSlider);
+
+        if (formatTextSliderView.getVisibility() == View.VISIBLE) {
+            formatTextSliderView.setVisibility(View.GONE);
         } else {
-            if (findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE) {
-                findViewById(R.id.drawPanelSlider).setVisibility(View.GONE);
+            if (drawPanelSliderView.getVisibility() == View.VISIBLE) {
+                drawPanelSliderView.setVisibility(View.GONE);
             }
-            findViewById(R.id.formatTextSlider).setVisibility(View.VISIBLE);
+            formatTextSliderView.setVisibility(View.VISIBLE);
         }
 
         // After changes:
-        setDrawModeOn(findViewById(R.id.formatTextSlider).getVisibility() != View.VISIBLE
-                && findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE);
+        setDrawModeOn(formatTextSliderView.getVisibility() != View.VISIBLE
+                && drawPanelSliderView.getVisibility() == View.VISIBLE);
     }
 
     /**
      * Method used to toggle draw menu panel
      * @param item MenuItem that handles that method in .xml android:OnClick
      */
-    public void toggleDrawMenu(MenuItem item) {
-        if (findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.drawPanelSlider).setVisibility(View.GONE);
+    public void toggleDrawMenu(@Nullable MenuItem item) {
+
+        View formatTextSliderView = findViewById(R.id.formatTextSlider);
+        View drawPanelSliderView = findViewById(R.id.drawPanelSlider);
+        
+        if (drawPanelSliderView.getVisibility() == View.VISIBLE) {
+            drawPanelSliderView.setVisibility(View.GONE);
         } else {
-            if (findViewById(R.id.formatTextSlider).getVisibility() == View.VISIBLE) {
-                findViewById(R.id.formatTextSlider).setVisibility(View.GONE);
+            if (formatTextSliderView.getVisibility() == View.VISIBLE) {
+                formatTextSliderView.setVisibility(View.GONE);
             }
-            findViewById(R.id.drawPanelSlider).setVisibility(View.VISIBLE);
+            hideSoftKeyboard();
+            drawPanelSliderView.setVisibility(View.VISIBLE);
         }
 
         // After changes:
-        setDrawModeOn(findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE);
-
+        setDrawModeOn(drawPanelSliderView.getVisibility() == View.VISIBLE);
     }
 
     /**
@@ -276,6 +277,9 @@ public class NoteActivity extends AppCompatActivity {
     public void toggleKeyboard(@Nullable MenuItem item) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        if (findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.drawPanelSlider).setVisibility(View.GONE);
+        }
     }
 
     /**
