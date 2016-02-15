@@ -150,10 +150,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
         return notes;
     }
 
-    //TODO possible not returning full notes (cursor issues)
     /**
      * Method used to get all notes in Database
      * @return Array of Notes, containing all notes in Database
@@ -180,6 +180,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             result[i] = notes.get(i);
         }
 
+        cursor.close();
         return result;
     }
 }

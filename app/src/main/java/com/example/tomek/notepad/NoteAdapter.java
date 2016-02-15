@@ -9,13 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class NoteAdapter extends ArrayAdapter<Note> {
 
     Context context;
     int layoutResourceId;
-    Note data[] = null;
+    ArrayList<Note> data = null;
 
-    public NoteAdapter(Context context, int layoutResourceId, Note[] data) {
+    public NoteAdapter(Context context, int layoutResourceId, ArrayList<Note> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -25,7 +27,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        NoteHolder holder = null;
+        NoteHolder holder;
 
         if(row == null)
         {
@@ -43,7 +45,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
             holder = (NoteHolder)row.getTag();
         }
 
-        Note note = data[position];
+        Note note = data.get(position);
         holder.noteTitle.setText("Note No: " + note.getId());
 
         String title = note.getRawText();
@@ -56,6 +58,10 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         }
 
         return row;
+    }
+
+    public void setData(ArrayList<Note> data) {
+        this.data = data;
     }
 
     static class NoteHolder

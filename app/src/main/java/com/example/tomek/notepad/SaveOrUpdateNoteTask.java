@@ -1,0 +1,67 @@
+package com.example.tomek.notepad;
+
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> {
+
+    private Activity mCallingActivity;
+    private DatabaseHandler mDbHandler;
+    private boolean mIsUpdating;
+
+
+    /**
+     * Custom constructor
+     * @param callingActivity used to make Toasts/Dialogs on it
+     * @param databaseHandler database handler with calling activity context
+     * @param isUpdating boolean that is used to see if note is new or updated
+     */
+    public SaveOrUpdateNoteTask(Activity callingActivity, DatabaseHandler databaseHandler, boolean isUpdating) {
+        mCallingActivity = callingActivity;
+        mDbHandler = databaseHandler;
+        mIsUpdating = isUpdating;
+    }
+
+    @Override
+    protected void onPreExecute() {
+    }
+
+    @Override
+    protected Void doInBackground(Note... params) {
+
+        if (mIsUpdating) {
+            mDbHandler.updateNote(params[0]);
+        }
+        else {
+            //TODO Memory issues test
+            /*for (int i = 0; i < 200; i++) {
+                mDbHandler.createNote(params[0]);
+                System.out.println(i);
+            }*/
+
+            mDbHandler.createNote(params[0]);
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+
+        ArrayList<Note> allNotes = mDbHandler.getAllNotesAsArrayList();
+
+        if (mIsUpdating) {
+            Toast.makeText(mCallingActivity, "Note updated", Toast.LENGTH_SHORT).show();
+            MainActivity.noteAdapter.setData(allNotes);
+            MainActivity.noteAdapter.notifyDataSetChanged();
+        }
+        else {
+            Toast.makeText(mCallingActivity, "Note created", Toast.LENGTH_SHORT).show();
+            MainActivity.noteAdapter.add(allNotes.get(mDbHandler.getNoteCount() - 1));
+            MainActivity.noteAdapter.setData(allNotes);
+            MainActivity.noteAdapter.notifyDataSetChanged();
+        }
+    }
+}

@@ -38,9 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private Note selectedNote;
 
     // Variables used to handle note list
-    private NoteAdapter noteAdapter;
-    private ListView listView;
-    private SearchView searchView;
+    public static NoteAdapter noteAdapter; // TODO is static ok?
+    public static ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add items to ListView
         listView = (ListView) findViewById(R.id.listView);
-        populateListView(dbHandler.getAllNotesAsArray());
+        populateListView(dbHandler.getAllNotesAsArrayList());
 
         // Assign listView to context menu
         registerForContextMenu(listView);
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         // Creating menu
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setQueryHint("Search notes...");
 
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
@@ -105,12 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                Note[] filteredNotes = new Note[filteredNotesArrayList.size()];
-                for (int i = 0; i < filteredNotes.length; i++) {
-                    filteredNotes[i] = filteredNotesArrayList.get(i);
-                }
-
-                populateListView(filteredNotes);
+                populateListView(filteredNotesArrayList);
                 noteAdapter.notifyDataSetChanged();
 
                 return true;
@@ -125,14 +119,6 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(queryTextListener);
 
         return true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        populateListView(dbHandler.getAllNotesAsArray());
-        noteAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -195,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dbHandler.deleteNote(selectedNote);
-                populateListView(dbHandler.getAllNotesAsArray());
+                noteAdapter.remove(selectedNote);
                 noteAdapter.notifyDataSetChanged();
                 Toast.makeText(MainActivity.this, "Note #" + selectedNote.getId() + " deleted",
                         Toast.LENGTH_SHORT).show();
@@ -238,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void deleteAllNotes() {
         dbHandler.clearAllNotes();
-        populateListView(dbHandler.getAllNotesAsArray());
+        noteAdapter.clear();
         noteAdapter.notifyDataSetChanged();
     }
 
@@ -272,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
      * Method used to fill ListView
      * @param note Array of Notes containing all Notes in Database
      */
-    private void populateListView(Note[] note) {
+    private void populateListView(ArrayList<Note> note) {
         noteAdapter = new NoteAdapter(this,
                 R.layout.listview_item_row, note);
         listView.setAdapter(noteAdapter);

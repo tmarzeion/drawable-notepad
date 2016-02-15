@@ -1,5 +1,6 @@
 package com.example.tomek.notepad;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,7 +33,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -42,6 +42,7 @@ import java.util.ArrayList;
  * - Updating existing ones,
  * - Deleting existing ones if text is changed to blank
  * - Text formatting
+ * - Drawing
  */
 public class NoteActivity extends AppCompatActivity {
 
@@ -49,10 +50,18 @@ public class NoteActivity extends AppCompatActivity {
     //TODO fix bug that adds two empty lines into loaded note (fixed like a retard)
     //TODO Enable choice of voice matches?
     //TODO Voice input text from cursor position
-    //TODO auto-save on back button when editing note (better user experience)
-    //TODO save blank note (when there is picture on it)
     //TODO async task (to reduce save note lag)
     //TODO add Javadoc
+    //TODO Delete Done button, add back button to left side of toolbar
+    //TODO Add Background function to note edit, then display this background on ListView
+    //TODO Clicking on "New note" on note edit activity changes note title
+    //TODO Default note title system (handle blank text notes, with pictures on it)
+    //TODO Toggle panels icons color
+
+    //TODO Disable text/draw panel when back button is clicked. Prevents user from saving note when tries to close panel with back button
+
+    //Calling activity
+    Activity callingActivity;
 
     // Draw mode booleans
     private boolean isDrawModeOn;
@@ -128,7 +137,7 @@ public class NoteActivity extends AppCompatActivity {
         // Setup AlertDialog
         alertDialogSaveNote = initAlertDialogSaveNote();
 
-        // get ID data from indent
+        // get ID data from intent
         Intent intent = getIntent();
         noteID = Integer.parseInt(intent.getStringExtra("id"));
 
@@ -393,17 +402,11 @@ public class NoteActivity extends AppCompatActivity {
 
         if (noteID == -1) {
             Note note = new Note (dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap());
-            dbHandler.createNote(note);
-
-            Toast.makeText(NoteActivity.this, "Note created",
-                    Toast.LENGTH_SHORT).show();
+            new SaveOrUpdateNoteTask(this,dbHandler, false).execute(note);
         }
         else {
             Note note = new Note (noteID, spannable, drawingView.getCanvasBitmap());
-            dbHandler.updateNote(note);
-
-            Toast.makeText(NoteActivity.this, "Note updated",
-                    Toast.LENGTH_SHORT).show();
+            new SaveOrUpdateNoteTask(this,dbHandler, true).execute(note);
         }
 
         hideSoftKeyboard();
