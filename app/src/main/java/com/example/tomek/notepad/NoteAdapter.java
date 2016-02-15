@@ -64,6 +64,10 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         this.data = data;
     }
 
+    public ArrayList<Note> getData() {
+        return data;
+    }
+
     static class NoteHolder
     {
         TextView noteTitle;

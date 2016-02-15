@@ -26,6 +26,9 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
+    // Array used to backup data before using search function
+    ArrayList<Note> allNotesSearchArray;
+
     // Database Handler
     private DatabaseHandler dbHandler;
 
@@ -91,16 +94,21 @@ public class MainActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setQueryHint("Search notes...");
 
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allNotesSearchArray = noteAdapter.getData();
+            }
+        });
+
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                //TODO Possibly low optimization because of DB Queries on every click
-                Note[] allNotes = dbHandler.getAllNotesAsArray();
                 ArrayList<Note> filteredNotesArrayList= new ArrayList<>();
-                for (Note allNote : allNotes) {
-                    if (allNote.getRawText().contains(newText)) {
-                        filteredNotesArrayList.add(allNote);
+                for (Note note : allNotesSearchArray) {
+                    if (note.getRawText().contains(newText)) {
+                        filteredNotesArrayList.add(note);
                     }
                 }
 
