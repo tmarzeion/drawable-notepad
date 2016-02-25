@@ -197,7 +197,19 @@ public class NoteActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        saveOrUpdateNote(null);
+
+        View formatTextSliderView = findViewById(R.id.formatTextSlider);
+        View drawPanelSliderView = findViewById(R.id.drawPanelSlider);
+
+        if (formatTextSliderView.getVisibility() == View.VISIBLE) {
+            formatTextSliderView.setVisibility(View.GONE);
+        }
+        else if (drawPanelSliderView.getVisibility() == View.VISIBLE) {
+            drawPanelSliderView.setVisibility(View.GONE);
+        }
+        else {
+            saveOrUpdateNote(null);
+        }
     }
 
     /**
