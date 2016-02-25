@@ -157,8 +157,7 @@ public class NoteActivity extends AppCompatActivity {
                 if (isDrawModeOn) {
                     drawingView.onTouchEvent(event);
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
@@ -203,6 +202,7 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Method used to toggle format text panel
+     *
      * @param item MenuItem that handles that method in .xml android:OnClick
      */
     public void toggleTextFormatMenu(@Nullable MenuItem item) {
@@ -226,13 +226,14 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Method used to toggle draw menu panel
+     *
      * @param item MenuItem that handles that method in .xml android:OnClick
      */
     public void toggleDrawMenu(@Nullable MenuItem item) {
 
         View formatTextSliderView = findViewById(R.id.formatTextSlider);
         View drawPanelSliderView = findViewById(R.id.drawPanelSlider);
-        
+
         if (drawPanelSliderView.getVisibility() == View.VISIBLE) {
             drawPanelSliderView.setVisibility(View.GONE);
         } else {
@@ -259,6 +260,7 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Method that calculates space left for EditText when format text panel is Visible
+     *
      * @return Screen independent pixel count of space for EditText
      */
     private int calculateMenuMargin() {
@@ -267,11 +269,12 @@ public class NoteActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         int height = size.y;
-        return  ((int) Math.round(height * MENU_MARGIN_RELATIVE_MODIFIER));
+        return ((int) Math.round(height * MENU_MARGIN_RELATIVE_MODIFIER));
     }
 
     /**
      * Method used to toggle soft keyboard
+     *
      * @param item MenuItem that handles that method in .xml android:OnClick
      */
     public void toggleKeyboard(@Nullable MenuItem item) {
@@ -298,6 +301,7 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Method that prevents soft keyboard appear when EditText is focused
+     *
      * @param editText EditText to apply changes to
      */
     private static void disableSoftInputFromAppearing(EditText editText) {
@@ -313,6 +317,7 @@ public class NoteActivity extends AppCompatActivity {
     /**
      * Method used to show format text panel when context menu is ON
      * i.e. When text is selected
+     *
      * @param editText EditText to apply changes to
      */
     private void manageContextMenuBar(EditText editText) {
@@ -345,6 +350,7 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Method used to format selected text by modifying Spannable object
+     *
      * @param view that handles that method in .xml android:OnClick
      */
     public void formatTextActionPerformed(View view) {
@@ -357,26 +363,19 @@ public class NoteActivity extends AppCompatActivity {
 
         if (view.getTag().toString().equals("bold")) {
             spannable.setSpan(new StyleSpan(Typeface.BOLD), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("italic")) {
+        } else if (view.getTag().toString().equals("italic")) {
             spannable.setSpan(new StyleSpan(Typeface.ITALIC), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("underline")) {
+        } else if (view.getTag().toString().equals("underline")) {
             spannable.setSpan(new UnderlineSpan(), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("textBlack")) {
+        } else if (view.getTag().toString().equals("textBlack")) {
             spannable.setSpan(new ForegroundColorSpan(Color.BLACK), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("textRed")) {
+        } else if (view.getTag().toString().equals("textRed")) {
             spannable.setSpan(new ForegroundColorSpan(Color.RED), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("textBlue")) {
+        } else if (view.getTag().toString().equals("textBlue")) {
             spannable.setSpan(new ForegroundColorSpan(Color.BLUE), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("textGreen")) {
+        } else if (view.getTag().toString().equals("textGreen")) {
             spannable.setSpan(new ForegroundColorSpan(Color.GREEN), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        else if (view.getTag().toString().equals("textYellow")) {
+        } else if (view.getTag().toString().equals("textYellow")) {
             spannable.setSpan(new ForegroundColorSpan(Color.YELLOW), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         editText.setText(spannable);
@@ -384,16 +383,15 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Method used to add note text to EditText
+     *
      * @param noteID
      */
     private void loadNote(int noteID) {
+
+        //todo fix
         editText.setText(dbHandler.getNote(noteID).getSpannable());
         editText.setSelection(editText.getText().toString().length());
         drawingView.setBitmap(dbHandler.getNote(noteID).getImage());
-
-        // Poker face :)
-        editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-        editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
     }
 
     /**
@@ -405,12 +403,11 @@ public class NoteActivity extends AppCompatActivity {
         spannable = editText.getText();
 
         if (noteID == -1) {
-            Note note = new Note (dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap());
-            new SaveOrUpdateNoteTask(this,dbHandler, false).execute(note);
-        }
-        else {
-            Note note = new Note (noteID, spannable, drawingView.getCanvasBitmap());
-            new SaveOrUpdateNoteTask(this,dbHandler, true).execute(note);
+            Note note = new Note(dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap());
+            new SaveOrUpdateNoteTask(this, dbHandler, false).execute(note);
+        } else {
+            Note note = new Note(noteID, spannable, drawingView.getCanvasBitmap());
+            new SaveOrUpdateNoteTask(this, dbHandler, true).execute(note);
         }
 
         hideSoftKeyboard();
@@ -427,8 +424,7 @@ public class NoteActivity extends AppCompatActivity {
     /**
      * Start the voice recognition activity.
      */
-    private void startVoiceRecognitionActivity()
-    {
+    private void startVoiceRecognitionActivity() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -440,10 +436,8 @@ public class NoteActivity extends AppCompatActivity {
      * Handle the results from the voice recognition
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
-        {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             ArrayList<String> matches = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
 
@@ -451,9 +445,8 @@ public class NoteActivity extends AppCompatActivity {
                 if (editText.getText().toString().length() == 0) {
                     editText.setText(matches.get(0));
                     editText.setSelection(editText.getText().toString().length());
-                }
-                else {
-                    Spanned spanText = ((SpannedString) TextUtils.concat(editText.getText()," " + matches.get(0)));
+                } else {
+                    Spanned spanText = ((SpannedString) TextUtils.concat(editText.getText(), " " + matches.get(0)));
                     editText.setText(spanText);
                     editText.setSelection(editText.getText().toString().length());
                 }
@@ -465,21 +458,17 @@ public class NoteActivity extends AppCompatActivity {
     /**
      * Method used to change drawing color
      */
-    public void changeColor (View v) {
+    public void changeColor(View v) {
 
         if (v.getTag().toString().equals("black")) {
             drawingView.setPaintColor(Color.BLACK);
-        }
-        else if (v.getTag().toString().equals("red")) {
+        } else if (v.getTag().toString().equals("red")) {
             drawingView.setPaintColor(Color.RED);
-        }
-        else if (v.getTag().toString().equals("blue")) {
+        } else if (v.getTag().toString().equals("blue")) {
             drawingView.setPaintColor(Color.BLUE);
-        }
-        else if (v.getTag().toString().equals("green")) {
+        } else if (v.getTag().toString().equals("green")) {
             drawingView.setPaintColor(Color.GREEN);
-        }
-        else if (v.getTag().toString().equals("yellow")) {
+        } else if (v.getTag().toString().equals("yellow")) {
             drawingView.setPaintColor(Color.YELLOW);
         }
     }
@@ -487,15 +476,13 @@ public class NoteActivity extends AppCompatActivity {
     /**
      * Method used to change brush size
      */
-    public void changeBrushSize (View v ) {
+    public void changeBrushSize(View v) {
 
         if (v.getTag().toString().equals("small")) {
             drawingView.setBrushSize(smallBrush);
-        }
-        else if (v.getTag().toString().equals("medium")) {
+        } else if (v.getTag().toString().equals("medium")) {
             drawingView.setBrushSize(mediumBrush);
-        }
-        else if (v.getTag().toString().equals("large")) {
+        } else if (v.getTag().toString().equals("large")) {
             drawingView.setBrushSize(largeBrush);
         }
     }

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                ArrayList<Note> filteredNotesArrayList= new ArrayList<>();
+                ArrayList<Note> filteredNotesArrayList = new ArrayList<>();
                 for (Note note : allNotesSearchArray) {
                     if (note.getRawText().contains(newText)) {
                         filteredNotesArrayList.add(note);
@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
         });
         return builder.create();
     }
-
     /**
      * Method used for first setup of delete all notes button AlertDialog
      */
@@ -204,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         });
         return builder.create();
     }
+
     /**
      * Method used to show AlertDialog when delete all notes button is clicked
      */
@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method used to enter note edition mode
+     *
      * @param noteId
      */
     private void editNote(int noteId) {
@@ -264,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method used to fill ListView
+     *
      * @param note Array of Notes containing all Notes in Database
      */
     private void populateListView(ArrayList<Note> note) {
@@ -282,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
             selectedNote = (Note) listView.getItemAtPosition(acmi.position);
             menu.setHeaderTitle("Choose action for note #" + selectedNote.getId());
-            MenuInflater inflater =getMenuInflater();
+            MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.context_menu_note_select, menu);
         }
     }
@@ -290,8 +292,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.context_menu_delete:
                 alertDialogDeleteSingleNote = setupAlertDialogDeleteSingleNote();
                 showAlertDialogDeleteSingleNote();

@@ -83,6 +83,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // :)))))
         Spannable spannable = (Spannable) Html.fromHtml(Html.toHtml(Html.fromHtml(spannableAsHtml)));
 
+        spannable = (Spannable) spannable.subSequence(0, spannable.length() - 2);
+
+
         Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
 
         db.close();
