@@ -1,6 +1,5 @@
 package com.example.tomek.notepad;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,7 +22,6 @@ import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.view.ActionMode;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
