@@ -53,9 +53,9 @@ public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> {
         ArrayList<Note> allNotes = mDbHandler.getAllNotesAsArrayList();
 
         if (mIsUpdating) {
-            Toast.makeText(mCallingActivity, "Note updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mCallingActivity, mCallingActivity.getString(R.string.toast_note_updated), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(mCallingActivity, "Note created", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mCallingActivity, mCallingActivity.getString(R.string.toast_note_created), Toast.LENGTH_SHORT).show();
             MainActivity.noteAdapter.add(allNotes.get(mDbHandler.getNoteCount() - 1));
         }
         MainActivity.noteAdapter.setData(allNotes);

@@ -45,7 +45,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         }
 
         Note note = data.get(position);
-        holder.noteTitle.setText("Note No: " + note.getId());
+        holder.noteTitle.setText(String.format(context.getString(R.string.note_number), note.getId()));
 
         String title = note.getRawText();
         if (title.length() != 0) {

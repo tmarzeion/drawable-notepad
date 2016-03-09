@@ -44,7 +44,6 @@ import java.util.ArrayList;
  */
 public class NoteActivity extends AppCompatActivity {
 
-    //TODO Using @String res instead of hardcoded strings
     //TODO fix bug that adds two empty lines into loaded note (fixed like a retard)
     //TODO Enable choice of voice matches?
     //TODO Voice input text from cursor position
@@ -175,14 +174,14 @@ public class NoteActivity extends AppCompatActivity {
     private AlertDialog initAlertDialogSaveNote() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Save note").setMessage("Do you want to save changes?");
+        builder.setTitle(this.getString(R.string.save_note_title)).setMessage(this.getString(R.string.save_note_confirmation));
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(this.getString(R.string.ok_button), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(this.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Nothing happens here...
             }

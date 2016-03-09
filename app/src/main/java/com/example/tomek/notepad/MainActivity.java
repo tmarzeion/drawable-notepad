@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setQueryHint("Search notes...");
+        searchView.setQueryHint(searchView.getContext().getResources().getString(R.string.search_hint));
 
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
@@ -135,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog initAlertDialogCloseApp() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure?").setTitle("Close Application");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setMessage(this.getString(R.string.confirmation)).setTitle(this.getString(R.string.close_app));
+        builder.setPositiveButton(this.getString(R.string.ok_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (android.os.Build.VERSION.SDK_INT >= 16) {
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(this.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
@@ -158,17 +158,17 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog initAlertDialogDeleteAllNotes() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure?").setTitle("Delete all notes");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setMessage(this.getString(R.string.confirmation)).setTitle(this.getString(R.string.delete_notes_title));
+        builder.setPositiveButton(this.getString(R.string.ok_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deleteAllNotes();
-                Toast.makeText(MainActivity.this, "All notes has been deleted!",
+                Toast.makeText(MainActivity.this, this.getString(R.string.delete_notes_success),
                         Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(this.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -183,19 +183,19 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog setupAlertDialogDeleteSingleNote() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure?").setTitle("Delete note #" + selectedNote.getId());
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setMessage(this.getString(R.string.confirmation)).setTitle(String.format(this.getString(R.string.delete_note_number), selectedNote.getId()));
+        builder.setPositiveButton(this.getString(R.string.ok_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dbHandler.deleteNote(selectedNote);
                 noteAdapter.remove(selectedNote);
                 noteAdapter.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this, "Note #" + selectedNote.getId() + " deleted",
+                Toast.makeText(MainActivity.this, String.format(this.getString(R.string.note_deleted), selectedNote.getId()),
                         Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(this.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
             ListView listView = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
             selectedNote = (Note) listView.getItemAtPosition(acmi.position);
-            menu.setHeaderTitle("Choose action for note #" + selectedNote.getId());
+            menu.setHeaderTitle(String.format(v.getContext().getString(R.string.choose_activity, selectedNote.getId())));
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.context_menu_note_select, menu);
         }
