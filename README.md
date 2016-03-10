@@ -1,5 +1,6 @@
 # Drawable Notepad
 [![Drawable Notepad](http://i.imgur.com/M9BBBpJ.png)](https://github.com/szafir1100/drawable-notepad)
+<br>
 Drawable Notepad is lightweight aplication that allows user to write some notes and draw on them.
 
 ## Get Drawable Notepad
