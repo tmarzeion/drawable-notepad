@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">メモ帳</string>
+    <string name="add_note">メモを追加</string>
+    <string name="action_delete_note">メモを削除</string>
+    <string name="action_search">検索</string>
+    <string name="action_text_format">テキストを整形</string>
+    <string name="action_done">完了</string>
+    <string name="action_toggle_keyboard">キーボードを表示</string>
+    <string name="action_voice">音声入力</string>
+    <string name="hint_write_note">ここにメモを書いてください…</string>
+    <string name="action_delete_all">すべてのメモを削除</string>
+    <string name="test">テスト</string>
+    <string name="voice_hint">話してください</string>
+
+    <string name="eraseAll">すべて消去</string>
+    <string name="brush">ブラシ</string>
+    <string name="erase">消しゴム</string>
+    <string name="paint">ペイント</string>
+    <string name="action_draw">描画</string>
+
+	<!-- Used in MainActivity.java -->
+	<string name="search_hint">メモを検索...</string>
+	<string name="confirmation">よろしいですか?</string>
+	<string name="close_app">アプリケーションを閉じる</string>
+	<string name="delete_note_number">メモ #%s を削除</string>
+	<string name="note_deleted">メモ #%s を削除しました</string>
+	<string name="delete_notes_title">すべてのメモを削除</string>
+	<string name="delete_notes_success">すべてのメモを削除しました!</string>
+	<string name="choose_activity">メモ #%s の操作を選択してください</string>
+
+	<!-- Used in NoteActivity.java -->
+	<string name="save_note_title">メモを保存</string>
+	<string name="save_note_confirmation">変更を保存しますか?</string>
+
+	<!-- Used in NoteAdapter.java -->
+	<string name="note_number">メモ No: %s</string>
+
+	<!-- Shared between MainActivity.java & NoteActivity.java -->
+	<string name="ok_button">OK</string>
+	<string name="cancel_button">キャンセル</string>
+
+	<!-- Used in SaveOrUpdateNoteTask.java -->
+	<string name="toast_note_created">メモを作成しました</string>
+	<string name="toast_note_updated">メモを更新しました</string>
+
+	<!-- Used in content_draw_panel.xml -->
+	<string name="draw_options">描画オプション:</string>
+	<string name="brush_color">ブラシの色:</string>
+	<string name="brush_size">ブラシのサイズ:</string>
+
+	<!-- Used in content_text_format.xml -->
+	<string name="text_color">文字の色:</string>
+	<string name="style">スタイル:</string>
+</resources>
