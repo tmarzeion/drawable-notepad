@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deleteAllNotes();
-                Toast.makeText(MainActivity.this, this.getString(R.string.delete_notes_success),
+                Toast.makeText(MainActivity.this, getString(R.string.delete_notes_success),
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 dbHandler.deleteNote(selectedNote);
                 noteAdapter.remove(selectedNote);
                 noteAdapter.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this, String.format(this.getString(R.string.note_deleted), selectedNote.getId()),
+                Toast.makeText(MainActivity.this, String.format(getString(R.string.note_deleted), selectedNote.getId()),
                         Toast.LENGTH_SHORT).show();
             }
         });

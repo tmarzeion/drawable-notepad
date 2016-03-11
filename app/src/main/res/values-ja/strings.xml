@@ -34,6 +34,7 @@
 
 	<!-- Used in NoteAdapter.java -->
 	<string name="note_number">メモ No: %s</string>
+	<string name="note_has_no_text">Note has no text.</string> <!-- TODO: Japan translation of this one -->
 
 	<!-- Shared between MainActivity.java & NoteActivity.java -->
 	<string name="ok_button">OK</string>
