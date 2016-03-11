@@ -19,7 +19,7 @@
     <string name="action_draw">描画</string>
 
 	<!-- Used in MainActivity.java -->
-	<string name="search_hint">メモを検索...</string>
+	<string name="search_hint">メモを検索…</string>
 	<string name="confirmation">よろしいですか?</string>
 	<string name="close_app">アプリケーションを閉じる</string>
 	<string name="delete_note_number">メモ #%s を削除</string>

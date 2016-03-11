@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Notatnik</string>
+    <string name="add_note">Notatka</string>
+    <string name="action_delete_note">Usuń notatkę</string>
+    <string name="action_search">Szukaj</string>
+    <string name="action_text_format">Formatowanie Tekstu</string>
+    <string name="action_done">Akceptuj</string>
+    <string name="action_toggle_keyboard">Pokaż klawiaturę</string>
+    <string name="action_voice">Wprowadzanie głosowe</string>
+    <string name="hint_write_note">Napisz swoją notatkę…</string>
+    <string name="action_delete_all">Usuń wszystkie notatki</string>
+    <string name="test">Test</string>
+    <string name="voice_hint">Mów teraz</string>
+
+    <string name="eraseAll">Skasuj wszystko</string>
+    <string name="brush">Pędzel</string>
+    <string name="erase">Gumka</string>
+    <string name="paint">Kolor</string>
+    <string name="action_draw">Rysuj</string>
+
+	<!-- Used in MainActivity.java -->
+	<string name="search_hint">Szukaj notatek…</string>
+	<string name="confirmation">Jesteś pewien?</string>
+	<string name="close_app">Zamknij aplikację</string>
+	<string name="delete_note_number">Usuń notatkę #%s</string>
+	<string name="note_deleted">Notatka #%s została usunięta</string>
+	<string name="delete_notes_title">Usuń wszystkie notatki</string>
+	<string name="delete_notes_success">Wszystkie notatki zostały usunięte!</string>
+	<string name="choose_activity">Wybierz akcję dla notatki #%s</string>
+
+	<!-- Used in NoteActivity.java -->
+	<string name="save_note_title">Zapisz notatkę</string>
+	<string name="save_note_confirmation">Czy chcesz zapisać zmiany?</string>
+
+	<!-- Used in NoteAdapter.java -->
+	<string name="note_number">Notatka nr. %s</string>
+	<string name="note_has_no_text">Pusta notatka.</string>
+
+
+	<!-- Shared between MainActivity.java & NoteActivity.java -->
+	<string name="ok_button">OK</string>
+	<string name="cancel_button">Anuluj</string>
+
+	<!-- Used in SaveOrUpdateNoteTask.java -->
+	<string name="toast_note_created">Notatka zapisana</string>
+	<string name="toast_note_updated">Notatka zmieniona</string>
+
+	<!-- Used in content_draw_panel.xml -->
+	<string name="draw_options">Opcje rysowania:</string>
+	<string name="brush_color">Kolor pędzla:</string>
+	<string name="brush_size">Rozmiar pędzla:</string>
+
+	<!-- Used in content_text_format.xml -->
+	<string name="text_color">Kolor tekstu:</string>
+	<string name="style">Styl:</string>
+</resources>

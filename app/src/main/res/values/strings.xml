@@ -19,7 +19,7 @@
     <string name="action_draw">Draw</string>
 
 	<!-- Used in MainActivity.java -->
-	<string name="search_hint">Search notes...</string>
+	<string name="search_hint">Search notes…</string>
 	<string name="confirmation">Are you sure?</string>
 	<string name="close_app">Close Application</string>
 	<string name="delete_note_number">Delete note #%s</string>
