@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedNote = ((Note) parent.getAdapter().getItem(position));
+                selectedNote = (Note) parent.getAdapter().getItem(position);
                 editNote(selectedNote.getId());
             }
         });
