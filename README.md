@@ -26,6 +26,13 @@ Drawable Notepad is lightweight aplication that allows user to write some notes 
 - Speech to text function
 - Saving notes in SQLite database
 
+### Upcoming features
+- Note titles
+- Filter notes by hashtag
+- French, German, Spanish translations
+
+Send some more features ideas if You have some!
+
 ## Contribution
 Feel free to improve Drawable Notepad if You have any ideas!
 
