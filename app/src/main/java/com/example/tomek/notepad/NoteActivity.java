@@ -103,10 +103,10 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note);
 
         // Set Views fields values
-        editText = ((EditText) findViewById(R.id.editText));
+        editText = (EditText) findViewById(R.id.editText);
         mSliderLayout = (LinearLayout) findViewById(R.id.formatTextSlider);
         mDrawLayout = (LinearLayout) findViewById(R.id.drawPanelSlider);
-        drawingView = ((DrawingView) findViewById(R.id.drawing));
+        drawingView = (DrawingView) findViewById(R.id.drawing);
 
         // set boolean values
         isDrawModeOn = false;
@@ -278,7 +278,7 @@ public class NoteActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         int height = size.y;
-        return ((int) Math.round(height * MENU_MARGIN_RELATIVE_MODIFIER));
+        return (int) Math.round(height * MENU_MARGIN_RELATIVE_MODIFIER);
     }
 
     /**
@@ -364,7 +364,7 @@ public class NoteActivity extends AppCompatActivity {
      */
     public void formatTextActionPerformed(View view) {
 
-        EditText editText = ((EditText) findViewById(R.id.editText));
+        EditText editText = (EditText) findViewById(R.id.editText);
         spannable = editText.getText();
 
         int posStart = editText.getSelectionStart();
@@ -455,7 +455,7 @@ public class NoteActivity extends AppCompatActivity {
                     editText.setText(matches.get(0));
                     editText.setSelection(editText.getText().toString().length());
                 } else {
-                    Spanned spanText = ((SpannedString) TextUtils.concat(editText.getText(), " " + matches.get(0)));
+                    Spanned spanText = (SpannedString) TextUtils.concat(editText.getText(), " " + matches.get(0));
                     editText.setText(spanText);
                     editText.setSelection(editText.getText().toString().length());
                 }
