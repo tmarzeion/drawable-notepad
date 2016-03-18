@@ -280,9 +280,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
 
         if (v.getId() == R.id.listView) {
-            ListView listView = (ListView) v;
+            ListView listViewLocal = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            selectedNote = (Note) listView.getItemAtPosition(acmi.position);
+            selectedNote = (Note) listViewLocal.getItemAtPosition(acmi.position);
             menu.setHeaderTitle(String.format(v.getContext().getString(R.string.choose_activity, selectedNote.getId())));
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.context_menu_note_select, menu);
