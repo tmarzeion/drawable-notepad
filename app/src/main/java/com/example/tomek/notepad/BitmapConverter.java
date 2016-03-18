@@ -8,7 +8,11 @@ import java.io.ByteArrayOutputStream;
 /**
  * Created by tomek on 13.02.16.
  */
-public class BitmapConverter {
+public final class BitmapConverter {
+
+    private BitmapConverter() throws InstantiationException {
+        throw new InstantiationException("This class is not for instantiation");
+    }
 
     // convert from bitmap to byte array
     public static byte[] getBytes(Bitmap bitmap) {

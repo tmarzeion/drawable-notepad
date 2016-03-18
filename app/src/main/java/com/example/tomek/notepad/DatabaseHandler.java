@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spannable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DatabaseHandler class used for Creating, Accessing and Modifying SQLite Database
@@ -139,7 +140,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Method used to get all notes in Database
      * @return ArrayList of Notes, containing all notes in Database
      */
-    public ArrayList<Note> getAllNotesAsArrayList() {
+    public List<Note> getAllNotesAsArrayList() {
         ArrayList<Note> notes = new ArrayList<>();
 
         SQLiteDatabase db = getWritableDatabase();
