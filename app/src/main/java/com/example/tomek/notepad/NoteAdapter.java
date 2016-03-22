@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteAdapter extends ArrayAdapter<Note> {
 
@@ -16,7 +17,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
     int layoutResourceId;
     ArrayList<Note> data = null;
 
-    public NoteAdapter(Context context, int layoutResourceId, ArrayList<Note> data) {
+    public NoteAdapter(Context context, int layoutResourceId, List<Note> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -59,11 +60,11 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         return row;
     }
 
-    public void setData(ArrayList<Note> data) {
-        this.data = data;
+    public void setData(List<Note> data) {
+        this.data = (ArrayList<Note>) data;
     }
 
-    public ArrayList<Note> getData() {
+    public List<Note> getData() {
         return data;
     }
 
