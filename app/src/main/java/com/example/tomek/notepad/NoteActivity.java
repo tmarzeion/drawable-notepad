@@ -63,7 +63,7 @@ public class NoteActivity extends AppCompatActivity {
     private DrawingView drawingView;
 
     // Brush sizes
-    private final float
+    private static final float
             smallBrush = 5,
             mediumBrush = 10,
             largeBrush = 20;
@@ -364,11 +364,11 @@ public class NoteActivity extends AppCompatActivity {
      */
     public void formatTextActionPerformed(View view) {
 
-        EditText editText = (EditText) findViewById(R.id.editText);
-        spannable = editText.getText();
+        EditText editTextLocal = (EditText) findViewById(R.id.editText);
+        spannable = editTextLocal.getText();
 
-        int posStart = editText.getSelectionStart();
-        int posEnd = editText.getSelectionEnd();
+        int posStart = editTextLocal.getSelectionStart();
+        int posEnd = editTextLocal.getSelectionEnd();
 
         if (view.getTag().toString().equals("bold")) {
             spannable.setSpan(new StyleSpan(Typeface.BOLD), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -387,7 +387,7 @@ public class NoteActivity extends AppCompatActivity {
         } else if (view.getTag().toString().equals("textYellow")) {
             spannable.setSpan(new ForegroundColorSpan(Color.YELLOW), posStart, posEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        editText.setText(spannable);
+        editTextLocal.setText(spannable);
     }
 
     /**
