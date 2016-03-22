@@ -50,7 +50,7 @@ public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
 
-        ArrayList<Note> allNotes = mDbHandler.getAllNotesAsArrayList();
+        ArrayList<Note> allNotes = (ArrayList<Note>) mDbHandler.getAllNotesAsArrayList();
 
         if (mIsUpdating) {
             Toast.makeText(mCallingActivity, mCallingActivity.getString(R.string.toast_note_updated), Toast.LENGTH_SHORT).show();

@@ -21,7 +21,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
-        this.data = data;
+        this.data = (ArrayList<Note>) data;
     }
 
     @Override

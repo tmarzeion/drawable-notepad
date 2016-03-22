@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add items to ListView
         listView = (ListView) findViewById(R.id.listView);
-        populateListView(dbHandler.getAllNotesAsArrayList());
+        populateListView((ArrayList<Note>) dbHandler.getAllNotesAsArrayList());
 
         // Assign listView to context menu
         registerForContextMenu(listView);
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                allNotesSearchArray = noteAdapter.getData();
+                allNotesSearchArray = (ArrayList<Note>) noteAdapter.getData();
             }
         });
 
