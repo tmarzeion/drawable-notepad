@@ -30,6 +30,7 @@ Drawable Notepad is lightweight aplication that allows user to write some notes 
 - Note titles
 - Filter notes by hashtag
 - French, German, Spanish translations
+- Photo notes
 
 Send some more features ideas if You have some!
 
