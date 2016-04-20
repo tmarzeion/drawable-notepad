@@ -24,8 +24,8 @@ public class Note {
     //Painting
     private Bitmap mImage;
 
-    //Dates
-    private Date dateUpdated;
+    //Dates (Default value)
+    private Date dateUpdated = new Date();
 
     //Formatter
     private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss");

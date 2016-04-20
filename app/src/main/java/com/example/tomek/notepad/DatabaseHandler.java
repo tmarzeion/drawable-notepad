@@ -22,7 +22,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "notepadDatabase";
     private static final String TABLE_NOTES = "notes";
     private static final String KEY_ID = "id";
@@ -41,14 +41,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NOTES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + KEY_SPANNABLE_NOTE + " TEXT, "
-                + KEY_DATE_UPDATED + " TEXT, "
-                + KEY_IMAGE + " BLOB)");
+                + KEY_IMAGE + " BLOB, "
+                + KEY_DATE_UPDATED + " TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);
-        onCreate(db);
+
+        switch (oldVersion)
+        {
+            case 1:
+                //upgrade from version 1 to 2
+                db.execSQL("ALTER TABLE + " + TABLE_NOTES + " ADD COLUMN + " + KEY_DATE_UPDATED + " TEXT;");
+            case 2:
+                //upgrade from version 2 to 3
+                //db.execSQL();
+
+                //and so on.. do not add breaks so that switch will
+                //start at oldVersion, and run straight through to the latest
+
+        }
     }
 
     /**
@@ -85,7 +97,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Note getNote(int id) {
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID, KEY_SPANNABLE_NOTE, KEY_DATE_UPDATED , KEY_IMAGE}, KEY_ID + "=?",
+        Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID, KEY_SPANNABLE_NOTE, KEY_IMAGE ,KEY_DATE_UPDATED}, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (cursor != null) {
@@ -96,12 +108,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // :)))))
         Spannable spannable = (Spannable) Html.fromHtml(Html.toHtml(Html.fromHtml(spannableAsHtml)));
 
+        Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+
         //Default val
         Date date = new Date();
 
         try {
-            date = dt.parse(cursor.getString(2));
+            date = dt.parse(cursor.getString(3));
         } catch (ParseException e) {
+            date = new Date();
             e.printStackTrace();
         }
 
@@ -109,7 +124,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             spannable = (Spannable) spannable.subSequence(0, spannable.length() - 2);
         }
 
-        Bitmap image = BitmapConverter.getImage(cursor.getBlob(3));
 
         db.close();
         cursor.close();
@@ -179,8 +193,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Date date = new Date();
 
                 try {
-                    date = dt.parse(cursor.getString(2));
+                    date = dt.parse(cursor.getString(3));
                 } catch (ParseException e) {
+                    date = new Date();
                     e.printStackTrace();
                 }
 
@@ -212,8 +227,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Date date = new Date();
 
                 try {
-                    date = dt.parse(cursor.getString(2));
+                    date = dt.parse(cursor.getString(3));
                 } catch (ParseException e) {
+                    date = new Date();
                     e.printStackTrace();
                 }
                 Note note = new Note(id, spannable, image, date);
