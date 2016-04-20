@@ -43,6 +43,7 @@
 	<!-- Used in SaveOrUpdateNoteTask.java -->
 	<string name="toast_note_created">メモを作成しました</string>
 	<string name="toast_note_updated">メモを更新しました</string>
+	<string name="last_updated">最終更新</string>
 
 	<!-- Used in content_draw_panel.xml -->
 	<string name="draw_options">描画オプション:</string>

@@ -44,6 +44,8 @@
 	<!-- Used in SaveOrUpdateNoteTask.java -->
 	<string name="toast_note_created">Notatka zapisana</string>
 	<string name="toast_note_updated">Notatka zmieniona</string>
+	<string name="last_updated">Ostatnia zmiana</string>
+
 
 	<!-- Used in content_draw_panel.xml -->
 	<string name="draw_options">Opcje rysowania:</string>

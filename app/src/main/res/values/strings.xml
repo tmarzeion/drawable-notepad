@@ -44,6 +44,7 @@
 	<!-- Used in SaveOrUpdateNoteTask.java -->
 	<string name="toast_note_created">Note created</string>
 	<string name="toast_note_updated">Note updated</string>
+	<string name="last_updated">Last updated</string>
 
 	<!-- Used in content_draw_panel.xml -->
 	<string name="draw_options">Draw options:</string>

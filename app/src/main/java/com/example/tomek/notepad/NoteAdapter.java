@@ -59,7 +59,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
             holder.noteContent.setText("INFO: Note has no text");
         }
 
-        holder.noteDate.setText("Last updated: " + note.getFormattedDateUpdatted());
+        holder.noteDate.setText(context.getString(R.string.last_updated) + ": " + note.getFormattedDateUpdatted());
 
         return row;
     }
