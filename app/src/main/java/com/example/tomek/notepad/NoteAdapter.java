@@ -37,6 +37,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
             holder = new NoteHolder();
             holder.noteTitle = (TextView)row.findViewById(R.id.noteTitle);
             holder.noteContent = (TextView)row.findViewById(R.id.noteContent);
+            holder.noteDate = (TextView)row.findViewById(R.id.noteDate);
+
 
             row.setTag(holder);
         }
@@ -57,6 +59,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
             holder.noteContent.setText("INFO: Note has no text");
         }
 
+        holder.noteDate.setText("Last updated: " + note.getFormattedDateUpdatted());
+
         return row;
     }
 
@@ -72,5 +76,6 @@ public class NoteAdapter extends ArrayAdapter<Note> {
     {
         TextView noteTitle;
         TextView noteContent;
+        TextView noteDate;
     }
 }

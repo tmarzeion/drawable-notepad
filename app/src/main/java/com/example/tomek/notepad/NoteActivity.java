@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Note Activity class that handles:
@@ -412,10 +413,10 @@ public class NoteActivity extends AppCompatActivity {
         spannable = editText.getText();
 
         if (noteID == -1) {
-            Note note = new Note(dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap());
+            Note note = new Note(dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap(), new Date());
             new SaveOrUpdateNoteTask(this, dbHandler, false).execute(note);
         } else {
-            Note note = new Note(noteID, spannable, drawingView.getCanvasBitmap());
+            Note note = new Note(noteID, spannable, drawingView.getCanvasBitmap(), new Date());
             new SaveOrUpdateNoteTask(this, dbHandler, true).execute(note);
         }
 

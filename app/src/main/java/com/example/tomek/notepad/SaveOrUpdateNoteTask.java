@@ -36,12 +36,6 @@ public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> {
             mDbHandler.updateNote(params[0]);
         }
         else {
-            //TODO Memory issues test
-            /*for (int i = 0; i < 200; i++) {
-                mDbHandler.createNote(params[0]);
-                System.out.println(i);
-            }*/
-
             mDbHandler.createNote(params[0]);
         }
         return null;

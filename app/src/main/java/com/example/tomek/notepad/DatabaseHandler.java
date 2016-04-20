@@ -8,7 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spannable;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +28,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_SPANNABLE_NOTE = "serializedSpannableNote";
     private static final String KEY_IMAGE = "image";
+    private static final String KEY_DATE_UPDATED = "dateUpdated";
+    private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss");
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,6 +41,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NOTES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + KEY_SPANNABLE_NOTE + " TEXT, "
+                + KEY_DATE_UPDATED + " TEXT, "
                 + KEY_IMAGE + " BLOB)");
     }
 
@@ -58,9 +66,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void createNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
         String spannableAsHtml = Html.toHtml(note.getSpannable());
+        String date = dt.format(new Date());
+
         ContentValues values = new ContentValues();
+
         values.put(KEY_SPANNABLE_NOTE, spannableAsHtml);
         values.put(KEY_IMAGE, BitmapConverter.getBytes(note.getImage()));
+        values.put(KEY_DATE_UPDATED, date);
         db.insert(TABLE_NOTES, null, values);
         db.close();
     }
@@ -73,7 +85,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Note getNote(int id) {
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID, KEY_SPANNABLE_NOTE, KEY_IMAGE}, KEY_ID + "=?",
+        Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID, KEY_SPANNABLE_NOTE, KEY_DATE_UPDATED , KEY_IMAGE}, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (cursor != null) {
@@ -84,15 +96,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // :)))))
         Spannable spannable = (Spannable) Html.fromHtml(Html.toHtml(Html.fromHtml(spannableAsHtml)));
 
+        //Default val
+        Date date = new Date();
+
+        try {
+            date = dt.parse(cursor.getString(2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         if (spannable.length() >= 2) {
             spannable = (Spannable) spannable.subSequence(0, spannable.length() - 2);
         }
 
-        Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+        Bitmap image = BitmapConverter.getImage(cursor.getBlob(3));
 
         db.close();
         cursor.close();
-        return new Note(id, spannable, image);
+        return new Note(id, spannable, image, date);
     }
 
     /**
@@ -129,8 +150,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String spannableAsHtml = Html.toHtml(note.getSpannable());
 
+        String date = dt.format(new Date());
+
         ContentValues values = new ContentValues();
         values.put(KEY_IMAGE, BitmapConverter.getBytes(note.getImage()));
+        values.put(KEY_DATE_UPDATED, date);
         values.put(KEY_SPANNABLE_NOTE, spannableAsHtml);
 
         return db.update(TABLE_NOTES, values, KEY_ID + "=?", new String[]{String.valueOf(note.getId())});
@@ -148,9 +172,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Note note = new Note(Integer.parseInt(cursor.getString(0)),
-                        (Spannable) Html.fromHtml(cursor.getString(1)),
-                        BitmapConverter.getImage(cursor.getBlob(2)));
+                int id = Integer.parseInt(cursor.getString(0));
+                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(1));
+                Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+                //Default val
+                Date date = new Date();
+
+                try {
+                    date = dt.parse(cursor.getString(2));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Note note = new Note(id, spannable, image, date);
                 notes.add(note);
             }
             while (cursor.moveToNext());
@@ -171,9 +205,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Note note = new Note(Integer.parseInt(cursor.getString(0)),
-                        (Spannable) Html.fromHtml(cursor.getString(1)),
-                        BitmapConverter.getImage(cursor.getBlob(2)));
+                int id = Integer.parseInt(cursor.getString(0));
+                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(1));
+                Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+                //Default val
+                Date date = new Date();
+
+                try {
+                    date = dt.parse(cursor.getString(2));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Note note = new Note(id, spannable, image, date);
                 notes.add(note);
             }
             while (cursor.moveToNext());
@@ -184,7 +227,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         for (int i = 0; i < notes.size(); i++) {
             result[i] = notes.get(i);
         }
-
         cursor.close();
         return result;
     }
