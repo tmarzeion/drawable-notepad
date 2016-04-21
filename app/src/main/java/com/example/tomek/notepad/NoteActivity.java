@@ -65,9 +65,9 @@ public class NoteActivity extends AppCompatActivity {
 
     // Brush sizes
     private static final float
-            smallBrush = 5,
-            mediumBrush = 10,
-            largeBrush = 20;
+            SMALL_BRUSH = 5,
+            MEDIUM_BRUSH = 10,
+            LARGE_BRUSH = 20;
 
     // Request code for voice input
     private static final int REQUEST_CODE = 1234;
@@ -95,7 +95,7 @@ public class NoteActivity extends AppCompatActivity {
     private Spannable spannable;
 
     // Alert dialog for back button and save button
-    AlertDialog alertDialogSaveNote;
+    private AlertDialog alertDialogSaveNote;
 
 
     @Override
@@ -489,11 +489,11 @@ public class NoteActivity extends AppCompatActivity {
     public void changeBrushSize(View v) {
 
         if (v.getTag().toString().equals("small")) {
-            drawingView.setBrushSize(smallBrush);
+            drawingView.setBrushSize(SMALL_BRUSH);
         } else if (v.getTag().toString().equals("medium")) {
-            drawingView.setBrushSize(mediumBrush);
+            drawingView.setBrushSize(MEDIUM_BRUSH);
         } else if (v.getTag().toString().equals("large")) {
-            drawingView.setBrushSize(largeBrush);
+            drawingView.setBrushSize(LARGE_BRUSH);
         }
     }
 
