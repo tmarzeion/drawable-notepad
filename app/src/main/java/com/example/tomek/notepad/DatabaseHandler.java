@@ -115,7 +115,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         try {
             date = dt.parse(cursor.getString(3));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             date = new Date();
             e.printStackTrace();
         }
@@ -194,7 +194,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 try {
                     date = dt.parse(cursor.getString(3));
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     date = new Date();
                     e.printStackTrace();
                 }
@@ -228,7 +228,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 try {
                     date = dt.parse(cursor.getString(3));
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     date = new Date();
                     e.printStackTrace();
                 }

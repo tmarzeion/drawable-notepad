@@ -7,8 +7,8 @@ android {
         applicationId "com.tomaszmarzeion.notepad"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 6
-        versionName "1.11 hotfix"
+        versionCode 7
+        versionName "1.12 hotfix"
     }
     buildTypes {
         release {
