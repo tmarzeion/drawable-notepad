@@ -52,7 +52,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         {
             case 1:
                 //upgrade from version 1 to 2
-                db.execSQL("ALTER TABLE + " + TABLE_NOTES + " ADD COLUMN + " + KEY_DATE_UPDATED + " TEXT;");
+                db.execSQL("ALTER TABLE " + TABLE_NOTES + " ADD COLUMN " + KEY_DATE_UPDATED + " TEXT;");
             case 2:
                 //upgrade from version 2 to 3
                 //db.execSQL();
