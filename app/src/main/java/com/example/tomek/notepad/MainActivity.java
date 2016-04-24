@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     // Array used to backup data before using search function
-    ArrayList<Note> allNotesSearchArray;
+    private ArrayList<Note> allNotesSearchArray;
 
     // Database Handler
     private DatabaseHandler dbHandler;

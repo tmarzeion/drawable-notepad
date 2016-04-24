@@ -13,16 +13,16 @@ import java.util.Date;
 public class Note {
 
     // KEY_ID of Note
-    private int mId;
+    private final int mId;
 
     // Spannable used to format text
-    private Spannable mSpannable;
+    private final Spannable mSpannable;
 
     // Raw text used to make titles
-    private String rawText;
+    private final String rawText;
 
     //Painting
-    private Bitmap mImage;
+    private final Bitmap mImage;
 
     //Dates (Default value)
     private Date dateUpdated = new Date();

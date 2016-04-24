@@ -15,12 +15,12 @@ import android.view.View;
 
 public class DrawingView extends View {
 
+    //initial color
+    private static final int DEFAULT_PAINT_COLOR = Color.BLACK;
     //drawing path
     private Path drawPath;
     //drawing and canvas paint
     private Paint drawPaint, canvasPaint;
-    //initial color
-    private int defaultPaintColor = Color.BLACK;
     //canvas
     private Canvas drawCanvas;
     //canvas bitmap
@@ -41,7 +41,7 @@ public class DrawingView extends View {
 
         setBrushSize(10);
 
-        drawPaint.setColor(defaultPaintColor);
+        drawPaint.setColor(DEFAULT_PAINT_COLOR);
 
         drawPaint.setAntiAlias(true);
         drawPaint.setStrokeWidth(brushSize);
