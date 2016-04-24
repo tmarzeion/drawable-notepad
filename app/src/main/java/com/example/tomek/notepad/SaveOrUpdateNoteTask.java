@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> {
 
-    private Activity mCallingActivity;
-    private DatabaseHandler mDbHandler;
-    private boolean mIsUpdating;
+    private final Activity mCallingActivity;
+    private final DatabaseHandler mDbHandler;
+    private final boolean mIsUpdating;
 
 
     /**

@@ -13,15 +13,15 @@ import java.util.List;
 
 public class NoteAdapter extends ArrayAdapter<Note> {
 
-    Context context;
-    int layoutResourceId;
-    ArrayList<Note> data = null;
+    private Context context;
+    private int layoutResourceId;
+    private List<Note> data = null;
 
     public NoteAdapter(Context context, int layoutResourceId, List<Note> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
-        this.data = (ArrayList<Note>) data;
+        this.data = data;
     }
 
     @Override
@@ -74,8 +74,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 
     static class NoteHolder
     {
-        TextView noteTitle;
-        TextView noteContent;
-        TextView noteDate;
+        private TextView noteTitle;
+        private TextView noteContent;
+        private TextView noteDate;
     }
 }
