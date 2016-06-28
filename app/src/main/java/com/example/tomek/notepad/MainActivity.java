@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHandler dbHandler;
 
     // Alert dialogs for back button and delete all notes button
-    private AlertDialog alertDialogCloseApp;
     private AlertDialog alertDialogDeleteAll;
     private AlertDialog alertDialogDeleteSingleNote;
 
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup AlertDialogs
         alertDialogDeleteAll = initAlertDialogDeleteAllNotes();
-        alertDialogCloseApp = initAlertDialogCloseApp();
 
         // Floating Action Button listener used to adding new notes
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -130,29 +128,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Method used for first setup of back button AlertDialog
-     */
-    private AlertDialog initAlertDialogCloseApp() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(this.getString(R.string.confirmation)).setTitle(this.getString(R.string.close_app));
-        builder.setPositiveButton(this.getString(R.string.ok_button), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (android.os.Build.VERSION.SDK_INT >= 16) {
-                    MainActivity.this.finishAffinity();
-                }
-            }
-        });
-
-        builder.setNegativeButton(this.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        return builder.create();
-    }
-    /**
      * Method used for first setup of delete all notes button AlertDialog
      */
     private AlertDialog initAlertDialogDeleteAllNotes() {
@@ -216,15 +191,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showAlertDialogDeleteSingleNote() {
         alertDialogDeleteSingleNote.show();
-    }
-
-    /**
-     * Method that Overrides back button behavior
-     * When back button is pressed it shows "back button" AlertDialog
-     */
-    @Override
-    public void onBackPressed() {
-        alertDialogCloseApp.show();
     }
 
     /**
