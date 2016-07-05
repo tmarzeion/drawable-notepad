@@ -1,4 +1,4 @@
-<img src=https://travis-ci.org/szafir1100/drawable-notepad.svg?branch=master></img>
+<img src=https://travis-ci.org/tmarzeion/drawable-notepad.svg?branch=master></img>
 # Drawable Notepad
 [![Drawable Notepad](http://i.imgur.com/M9BBBpJ.png)](https://github.com/szafir1100/drawable-notepad)
 <br>
