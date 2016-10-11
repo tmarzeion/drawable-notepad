@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -402,12 +403,16 @@ public class NoteActivity extends AppCompatActivity {
      */
     private void loadNote(int noteID) {
 
-        Note n = dbHandler.getNote(noteID);
-        //todo fix
-        editText.setText(n.getSpannable());
-        editText.setSelection(editText.getText().toString().length());
-        noteTitle.setText(n.getTitle());
-        drawingView.setBitmap(n.getImage());
+        try {
+            Note n = dbHandler.getNote(noteID);
+            //todo fix
+            editText.setText(n.getSpannable());
+            editText.setSelection(editText.getText().toString().length());
+            noteTitle.setText(n.getTitle());
+            drawingView.setBitmap(n.getImage());
+        }catch (SQLiteException e){
+            e.printStackTrace();
+        }
     }
 
     /**

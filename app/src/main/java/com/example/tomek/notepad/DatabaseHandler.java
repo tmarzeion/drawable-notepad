@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.text.Html;
@@ -100,14 +101,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param id KEY_ID of Note to get from Database
      * @return Note object with specified KEY_ID
      */
-    public Note getNote(int id) {
+    public Note getNote(int id) throws SQLiteException {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID, KEY_SPANNABLE_NOTE, KEY_IMAGE, KEY_DATE_UPDATED, KEY_NOTE_TITLE}, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
-        if (cursor != null) {
-            cursor.moveToFirst();
+        if (!cursor.moveToFirst()) {
+            deleteNote(id); //Failed to load note. Maybe the user restored data from an incompatible backup?
+            //Let's delete the problematic data
+            throw new SQLiteException("Note doesn't exist");
         }
 
         String spannableAsHtml = cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE));
@@ -149,8 +152,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param note Note to delete
      */
     public void deleteNote(Note note) {
+        deleteNote(note.getId());
+    }
+
+    public void deleteNote(int noteId) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NOTES, KEY_ID + "=?", new String[]{String.valueOf(note.getId())});
+        db.delete(TABLE_NOTES, KEY_ID + "=?", new String[]{String.valueOf(noteId)});
         db.close();
     }
 
