@@ -110,17 +110,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
-        String spannableAsHtml = cursor.getString(1);
+        String spannableAsHtml = cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE));
         // :)))))
         Spannable spannable = (Spannable) Html.fromHtml(Html.toHtml(Html.fromHtml(spannableAsHtml)));
 
-        Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+        Bitmap image = BitmapConverter.getImage(cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE)));
 
         //Default val
         Date date;
 
         try {
-            date = dt.parse(cursor.getString(3));
+            date = dt.parse(cursor.getString(cursor.getColumnIndex(KEY_DATE_UPDATED)));
         } catch (Exception e) {
             date = new Date();
             e.printStackTrace();
@@ -128,7 +128,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String title;
         try {
-            title = cursor.getString(4); //TODO: replace integers with column keys
+            title = cursor.getString(cursor.getColumnIndex(KEY_NOTE_TITLE));
         }catch (Exception e){
             title = "";
             e.printStackTrace();
@@ -201,14 +201,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                int id = Integer.parseInt(cursor.getString(0));
-                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(1));
-                Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+                int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE)));
+                Bitmap image = BitmapConverter.getImage(cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE)));
                 //Default val
                 Date date;
 
                 try {
-                    date = dt.parse(cursor.getString(3));
+                    date = dt.parse(cursor.getString(cursor.getColumnIndex(KEY_DATE_UPDATED)));
                 } catch (Exception e) {
                     date = new Date();
                     e.printStackTrace();
@@ -216,7 +216,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 String title;
                 try {
-                    title = cursor.getString(4);
+                    title = cursor.getString(cursor.getColumnIndex(KEY_NOTE_TITLE));
                 } catch (Exception e) {
                     title = "";
                     e.printStackTrace();
@@ -243,14 +243,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                int id = Integer.parseInt(cursor.getString(0));
-                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(1));
-                Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
+                int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE)));
+                Bitmap image = BitmapConverter.getImage(cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE)));
                 //Default val
                 Date date;
 
                 try {
-                    date = dt.parse(cursor.getString(3));
+                    date = dt.parse(cursor.getString(cursor.getColumnIndex(KEY_DATE_UPDATED)));
                 } catch (Exception e) {
                     date = new Date();
                     e.printStackTrace();
@@ -258,7 +258,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 String title;
                 try {
-                    title = cursor.getString(4);
+                    title = cursor.getString(cursor.getColumnIndex(KEY_NOTE_TITLE));
                 } catch (Exception e) {
                     title = "";
                     e.printStackTrace();
