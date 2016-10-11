@@ -33,7 +33,7 @@
 	<string name="save_note_confirmation">変更を保存しますか?</string>
 
 	<!-- Used in NoteAdapter.java -->
-	<string name="note_number">メモ No: %s</string>
+	<string name="note_number">メモ No: %d</string>
 	<string name="note_has_no_text">Note has no text.</string> <!-- TODO: Japan translation of this one -->
 
 	<!-- Shared between MainActivity.java & NoteActivity.java -->

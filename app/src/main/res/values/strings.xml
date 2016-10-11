@@ -33,7 +33,7 @@
 	<string name="save_note_confirmation">Do you want to save changes?</string>
 
 	<!-- Used in NoteAdapter.java -->
-	<string name="note_number">Note No: %s</string>
+	<string name="note_number">Note No: %d</string>
 	<string name="note_has_no_text">Note has no text.</string>
 
 
