@@ -3,6 +3,7 @@ package com.example.tomek.notepad;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -14,7 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 /**
  * DatabaseHandler class used for Creating, Accessing and Modifying SQLite Database
@@ -30,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_SPANNABLE_NOTE = "serializedSpannableNote";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_DATE_UPDATED = "dateUpdated";
-    private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss");
+    private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss", Locale.getDefault());
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -167,12 +168,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public int getNoteCount() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NOTES, null);
-        int result = cursor.getCount();
-
-        cursor.close();
+        int numberOfNotes = (int) DatabaseUtils.queryNumEntries(db, TABLE_NOTES);
         db.close();
-        return result;
+        return numberOfNotes;
     }
 
     /**
@@ -200,7 +198,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Method used to get all notes in Database
      * @return ArrayList of Notes, containing all notes in Database
      */
-    public List<Note> getAllNotesAsArrayList() {
+    public ArrayList<Note> getAllNotesAsArrayList() {
         ArrayList<Note> notes = new ArrayList<>();
 
         SQLiteDatabase db = getWritableDatabase();

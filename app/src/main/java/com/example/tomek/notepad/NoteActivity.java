@@ -399,7 +399,7 @@ public class NoteActivity extends AppCompatActivity {
     /**
      * Method used to add note text to EditText
      *
-     * @param noteID
+     * @param noteID ID number of the Note entry in the SQLite database
      */
     private void loadNote(int noteID) {
 

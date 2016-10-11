@@ -6,6 +6,7 @@ import android.text.Spannable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Class that represents single Note
@@ -31,7 +32,7 @@ public class Note {
     private Date dateUpdated = new Date();
 
     //Formatter
-    private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss");
+    private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss", Locale.getDefault());
 
 
 

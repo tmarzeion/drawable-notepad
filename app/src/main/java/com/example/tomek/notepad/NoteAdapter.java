@@ -2,13 +2,13 @@ package com.example.tomek.notepad;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends ArrayAdapter<Note> {
@@ -25,7 +25,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         NoteHolder holder;
 
@@ -68,14 +69,14 @@ public class NoteAdapter extends ArrayAdapter<Note> {
     }
 
     public void setData(List<Note> data) {
-        this.data = (ArrayList<Note>) data;
+        this.data = data;
     }
 
     public List<Note> getData() {
         return data;
     }
 
-    static class NoteHolder
+    private static class NoteHolder
     {
         private TextView noteTitle;
         private TextView noteContent;
