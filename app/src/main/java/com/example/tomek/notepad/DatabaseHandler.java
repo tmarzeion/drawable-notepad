@@ -117,7 +117,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
 
         //Default val
-        Date date = new Date();
+        Date date;
 
         try {
             date = dt.parse(cursor.getString(3));
@@ -126,10 +126,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        String title = "";
+        String title;
         try {
             title = cursor.getString(4); //TODO: replace integers with column keys
         }catch (Exception e){
+            title = "";
             e.printStackTrace();
         }
 
@@ -204,7 +205,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(1));
                 Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
                 //Default val
-                Date date = new Date();
+                Date date;
 
                 try {
                     date = dt.parse(cursor.getString(3));
@@ -213,11 +214,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
 
-                String title = "";
+                String title;
                 try {
                     title = cursor.getString(4);
                 } catch (Exception e) {
-                    date = new Date();
+                    title = "";
                     e.printStackTrace();
                 }
 
@@ -246,7 +247,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(1));
                 Bitmap image = BitmapConverter.getImage(cursor.getBlob(2));
                 //Default val
-                Date date = new Date();
+                Date date;
 
                 try {
                     date = dt.parse(cursor.getString(3));
@@ -255,11 +256,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
 
-                String title = "";
+                String title;
                 try {
                     title = cursor.getString(4);
                 } catch (Exception e) {
-                    date = new Date();
+                    title = "";
                     e.printStackTrace();
                 }
 
