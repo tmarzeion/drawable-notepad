@@ -18,6 +18,9 @@ public class Note {
     // Spannable used to format text
     private final Spannable mSpannable;
 
+    //
+    private final String mTitle;
+
     // Raw text used to make titles
     private final String rawText;
 
@@ -34,8 +37,9 @@ public class Note {
 
 
 
-    public Note(int id, Spannable spannable, Bitmap image, Date dateUpdated) {
+    public Note(int id, String title, Spannable spannable, Bitmap image, Date dateUpdated) {
         mId = id;
+        mTitle = title;
         mSpannable = spannable;
         mImage = image;
         rawText = mSpannable.toString();
@@ -44,6 +48,10 @@ public class Note {
 
     public int getId() {
         return mId;
+    }
+
+    public String getTitle(){
+        return mTitle;
     }
 
     public Spannable getSpannable() {

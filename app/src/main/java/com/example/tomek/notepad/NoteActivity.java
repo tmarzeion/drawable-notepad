@@ -87,6 +87,9 @@ public class NoteActivity extends AppCompatActivity {
     // (is -1 when it's new note)
     private int noteID;
 
+    // Title of note
+    private EditText noteTitle;
+
     // EditText panel
     private EditText editText;
 
@@ -104,6 +107,7 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note);
 
         // Set Views fields values
+        noteTitle = (EditText) findViewById(R.id.activity_note_title);
         editText = (EditText) findViewById(R.id.editText);
         mSliderLayout = (LinearLayout) findViewById(R.id.formatTextSlider);
         mDrawLayout = (LinearLayout) findViewById(R.id.drawPanelSlider);
@@ -315,7 +319,7 @@ public class NoteActivity extends AppCompatActivity {
      * @param editText EditText to apply changes to
      */
     private static void disableSoftInputFromAppearing(EditText editText) {
-        if (Build.VERSION.SDK_INT >= 11) {
+        if (Build.VERSION.SDK_INT >= 11) { //TODO: remove
             editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
             editText.setTextIsSelectable(true);
         } else {
@@ -398,10 +402,12 @@ public class NoteActivity extends AppCompatActivity {
      */
     private void loadNote(int noteID) {
 
+        Note n = dbHandler.getNote(noteID);
         //todo fix
-        editText.setText(dbHandler.getNote(noteID).getSpannable());
+        editText.setText(n.getSpannable());
         editText.setSelection(editText.getText().toString().length());
-        drawingView.setBitmap(dbHandler.getNote(noteID).getImage());
+        noteTitle.setText(n.getTitle());
+        drawingView.setBitmap(n.getImage());
     }
 
     /**
@@ -411,12 +417,13 @@ public class NoteActivity extends AppCompatActivity {
     public void saveOrUpdateNote(@Nullable MenuItem menu) {
 
         spannable = editText.getText();
+        String title = noteTitle.getText().toString();
 
         if (noteID == -1) {
-            Note note = new Note(dbHandler.getNoteCount(), spannable, drawingView.getCanvasBitmap(), new Date());
+            Note note = new Note(dbHandler.getNoteCount(), title, spannable, drawingView.getCanvasBitmap(), new Date());
             new SaveOrUpdateNoteTask(this, dbHandler, false).execute(note);
         } else {
-            Note note = new Note(noteID, spannable, drawingView.getCanvasBitmap(), new Date());
+            Note note = new Note(noteID, title, spannable, drawingView.getCanvasBitmap(), new Date());
             new SaveOrUpdateNoteTask(this, dbHandler, true).execute(note);
         }
 
