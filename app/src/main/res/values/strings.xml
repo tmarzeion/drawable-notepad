@@ -22,11 +22,11 @@
 	<string name="search_hint">Search notes…</string>
 	<string name="confirmation">Are you sure?</string>
 	<string name="close_app">Close Application</string>
-	<string name="delete_note_number">Delete note #%s</string>
-	<string name="note_deleted">Note #%s deleted</string>
+	<string name="delete_note_number">Delete note #%d</string>
+	<string name="note_deleted">Note #%d deleted</string>
 	<string name="delete_notes_title">Delete all notes</string>
 	<string name="delete_notes_success">All notes have been deleted!</string>
-	<string name="choose_activity">Choose action for note #%s</string>
+	<string name="choose_activity">Choose action for note #%d</string>
 
 	<!-- Used in NoteActivity.java -->
 	<string name="save_note_title">Save note</string>

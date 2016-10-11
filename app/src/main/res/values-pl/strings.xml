@@ -22,11 +22,11 @@
 	<string name="search_hint">Szukaj notatek…</string>
 	<string name="confirmation">Jesteś pewien?</string>
 	<string name="close_app">Zamknij aplikację</string>
-	<string name="delete_note_number">Usuń notatkę #%s</string>
-	<string name="note_deleted">Notatka #%s została usunięta</string>
+	<string name="delete_note_number">Usuń notatkę #%d</string>
+	<string name="note_deleted">Notatka #%d została usunięta</string>
 	<string name="delete_notes_title">Usuń wszystkie notatki</string>
 	<string name="delete_notes_success">Wszystkie notatki zostały usunięte!</string>
-	<string name="choose_activity">Wybierz akcję dla notatki #%s</string>
+	<string name="choose_activity">Wybierz akcję dla notatki #%d</string>
 
 	<!-- Used in NoteActivity.java -->
 	<string name="save_note_title">Zapisz notatkę</string>
