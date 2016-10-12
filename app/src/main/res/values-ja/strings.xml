@@ -22,18 +22,18 @@
 	<string name="search_hint">メモを検索…</string>
 	<string name="confirmation">よろしいですか?</string>
 	<string name="close_app">アプリケーションを閉じる</string>
-	<string name="delete_note_number">メモ #%s を削除</string>
-	<string name="note_deleted">メモ #%s を削除しました</string>
+	<string name="delete_note_number">メモ #%d を削除</string>
+	<string name="note_deleted">メモ #%d を削除しました</string>
 	<string name="delete_notes_title">すべてのメモを削除</string>
 	<string name="delete_notes_success">すべてのメモを削除しました!</string>
-	<string name="choose_activity">メモ #%s の操作を選択してください</string>
+	<string name="choose_activity">メモ #%d の操作を選択してください</string>
 
 	<!-- Used in NoteActivity.java -->
 	<string name="save_note_title">メモを保存</string>
 	<string name="save_note_confirmation">変更を保存しますか?</string>
 
 	<!-- Used in NoteAdapter.java -->
-	<string name="note_number">メモ No: %s</string>
+	<string name="note_number">メモ No: %d</string>
 	<string name="note_has_no_text">Note has no text.</string> <!-- TODO: Japan translation of this one -->
 
 	<!-- Shared between MainActivity.java & NoteActivity.java -->

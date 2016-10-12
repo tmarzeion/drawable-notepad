@@ -6,6 +6,7 @@ import android.text.Spannable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Class that represents single Note
@@ -18,6 +19,9 @@ public class Note {
     // Spannable used to format text
     private final Spannable mSpannable;
 
+    //
+    private final String mTitle;
+
     // Raw text used to make titles
     private final String rawText;
 
@@ -28,14 +32,15 @@ public class Note {
     private Date dateUpdated = new Date();
 
     //Formatter
-    private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss");
+    private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss", Locale.getDefault());
 
 
 
 
 
-    public Note(int id, Spannable spannable, Bitmap image, Date dateUpdated) {
+    public Note(int id, String title, Spannable spannable, Bitmap image, Date dateUpdated) {
         mId = id;
+        mTitle = title;
         mSpannable = spannable;
         mImage = image;
         rawText = mSpannable.toString();
@@ -44,6 +49,10 @@ public class Note {
 
     public int getId() {
         return mId;
+    }
+
+    public String getTitle(){
+        return mTitle;
     }
 
     public Spannable getSpannable() {

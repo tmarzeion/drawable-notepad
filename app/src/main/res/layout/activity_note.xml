@@ -22,6 +22,16 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/activity_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:maxLength="100"
+            android:hint="Enter title (optional)"/>
+
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

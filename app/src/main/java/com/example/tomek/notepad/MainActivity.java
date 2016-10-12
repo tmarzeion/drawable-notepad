@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private Note selectedNote;
 
     // Variables used to handle note list
-    public static NoteAdapter noteAdapter; // TODO is static ok?
-    public static ListView listView;
+    public NoteAdapter noteAdapter;
+    public ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add items to ListView
         listView = (ListView) findViewById(R.id.listView);
-        populateListView((ArrayList<Note>) dbHandler.getAllNotesAsArrayList());
+        populateListView(dbHandler.getAllNotesAsArrayList());
 
         // Assign listView to context menu
         registerForContextMenu(listView);
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method used to enter note edition mode
      *
-     * @param noteId
+     * @param noteId ID number of the Note entry in the SQLite database
      */
     private void editNote(int noteId) {
         hideSoftKeyboard();
@@ -234,10 +234,20 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param note Array of Notes containing all Notes in Database
      */
-    private void populateListView(ArrayList<Note> note) {
+    void populateListView(ArrayList<Note> note) {
         noteAdapter = new NoteAdapter(this,
                 R.layout.listview_item_row, note);
         listView.setAdapter(noteAdapter);
+    }
+
+    public void setListViewData(ArrayList<Note> allNotes, Note newNote) {
+        if (noteAdapter != null) {
+            if (newNote != null){
+                noteAdapter.add(newNote);
+            }
+            noteAdapter.setData(allNotes);
+            noteAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -249,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
             ListView listViewLocal = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
             selectedNote = (Note) listViewLocal.getItemAtPosition(acmi.position);
-            menu.setHeaderTitle(String.format(v.getContext().getString(R.string.choose_activity, selectedNote.getId())));
+            menu.setHeaderTitle(String.format(v.getContext().getString(R.string.choose_activity), selectedNote.getId()));
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.context_menu_note_select, menu);
         }
@@ -269,4 +279,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
+
 }
