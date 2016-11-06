@@ -7,8 +7,8 @@ android {
         applicationId "com.tomaszmarzeion.notepad"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 7
-        versionName "1.12 hotfix"
+        versionCode 9
+        versionName "1.21"
     }
     lintOptions {
         abortOnError false

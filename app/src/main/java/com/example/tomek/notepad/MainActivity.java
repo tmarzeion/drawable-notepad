@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private Note selectedNote;
 
     // Variables used to handle note list
-    public NoteAdapter noteAdapter;
-    public ListView listView;
+    public static NoteAdapter noteAdapter;
+    public static ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

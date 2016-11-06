@@ -1,20 +1,16 @@
 package com.example.tomek.notepad;
 
 import android.app.Activity;
-import android.app.Application;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> implements Application.ActivityLifecycleCallbacks {
+public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> {
 
     private final Activity mCallingActivity;
     private final DatabaseHandler mDbHandler;
     private final boolean mIsUpdating;
-    private Activity currentActivity = null;
-
 
     /**
      * Custom constructor
@@ -26,7 +22,6 @@ public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> implements
         mCallingActivity = callingActivity;
         mDbHandler = databaseHandler;
         mIsUpdating = isUpdating;
-        callingActivity.getApplication().registerActivityLifecycleCallbacks(this);
     }
 
     @Override
@@ -47,48 +42,14 @@ public class SaveOrUpdateNoteTask extends AsyncTask<Note, Void, Void> implements
 
     @Override
     protected void onPostExecute(Void result) {
-
+        ArrayList<Note> allNotes = mDbHandler.getAllNotesAsArrayList();
         if (mIsUpdating) {
             Toast.makeText(mCallingActivity, mCallingActivity.getString(R.string.toast_note_updated), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(mCallingActivity, mCallingActivity.getString(R.string.toast_note_created), Toast.LENGTH_SHORT).show();
+            MainActivity.noteAdapter.add(allNotes.get(mDbHandler.getNoteCount() - 1));
         }
-
-        updateNoteListView();
-
+        MainActivity.noteAdapter.setData(allNotes);
+        MainActivity.noteAdapter.notifyDataSetChanged();
     }
-
-    private void updateNoteListView(){
-        if (currentActivity != null && currentActivity instanceof MainActivity){
-            ArrayList<Note> allNotes = mDbHandler.getAllNotesAsArrayList();
-            Note newNote = null;
-            if (!mIsUpdating){
-                newNote = allNotes.get(mDbHandler.getNoteCount() - 1);
-            }
-            ((MainActivity) currentActivity).setListViewData(allNotes, newNote);
-        }
-    }
-
-    @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
-
-    @Override
-    public void onActivityStarted(Activity activity) {}
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-        currentActivity = activity;
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {}
-
-    @Override
-    public void onActivityStopped(Activity activity) {}
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {}
 }
