@@ -5,9 +5,6 @@ import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
 
-/**
- * Created by tomek on 13.02.16.
- */
 public final class BitmapConverter {
 
     private BitmapConverter() throws InstantiationException {

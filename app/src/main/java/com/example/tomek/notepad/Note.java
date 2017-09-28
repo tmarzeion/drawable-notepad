@@ -14,19 +14,19 @@ import java.util.Locale;
 public class Note {
 
     // KEY_ID of Note
-    private final int mId;
+    private int mId = -1;
 
     // Spannable used to format text
-    private final Spannable mSpannable;
+    private Spannable mSpannable;
 
     //
-    private final String mTitle;
+    private String mTitle;
 
     // Raw text used to make titles
-    private final String rawText;
+    private String rawText;
 
     //Painting
-    private final Bitmap mImage;
+    private Bitmap mImage;
 
     //Dates (Default value)
     private Date dateUpdated = new Date();
@@ -34,16 +34,16 @@ public class Note {
     //Formatter
     private static final DateFormat dt = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss", Locale.getDefault());
 
+    public Note() {
 
-
-
+    }
 
     public Note(int id, String title, Spannable spannable, Bitmap image, Date dateUpdated) {
-        mId = id;
-        mTitle = title;
-        mSpannable = spannable;
-        mImage = image;
-        rawText = mSpannable.toString();
+        this.mId = id;
+        this.mTitle = title;
+        this.mSpannable = spannable;
+        this.mImage = image;
+        this.rawText = mSpannable.toString(); //TODO Remove this field and make this value accessible through utility method
         this.dateUpdated = dateUpdated;
     }
 
@@ -73,5 +73,29 @@ public class Note {
 
     public String getFormattedDateUpdatted() {
         return dt.format(dateUpdated);
+    }
+
+    public void setId(int id) {
+        this.mId = id;
+    }
+
+    public void setSpannable(Spannable spannable) {
+        this.mSpannable = spannable;
+    }
+
+    public void setTitle(String title) {
+        this.mTitle = title;
+    }
+
+    public void setRawText(String rawText) {
+        this.rawText = rawText;
+    }
+
+    public void setImage(Bitmap image) {
+        this.mImage = image;
+    }
+
+    public void setDateUpdated(Date dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 }

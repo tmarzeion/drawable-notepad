@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +25,7 @@ import java.util.Locale;
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+    // TODO: Try not to exec SQL directly, prevent from SQL injects
 
     private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "notepadDatabase";
@@ -36,7 +40,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -84,7 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public void createNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
-        String spannableAsHtml = Html.toHtml(note.getSpannable());
+        String spannableAsHtml = convertSpannableToHtmlString(note.getSpannable());
         String date = dt.format(new Date());
 
         ContentValues values = new ContentValues();
@@ -93,6 +96,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_NOTE_TITLE, note.getTitle());
         values.put(KEY_IMAGE, BitmapConverter.getBytes(note.getImage()));
         values.put(KEY_DATE_UPDATED, date);
+
         db.insert(TABLE_NOTES, null, values);
         db.close();
     }
@@ -109,18 +113,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (!cursor.moveToFirst()) {
-            deleteNote(id); //Failed to load note. Maybe the user restored data from an incompatible backup?
+            //Failed to load note. Maybe the user restored data from an incompatible backup?
             //Let's delete the problematic data
+            deleteNote(id);
             throw new SQLiteException("Note doesn't exist");
         }
 
         String spannableAsHtml = cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE));
-        // :)))))
-        Spannable spannable = (Spannable) Html.fromHtml(Html.toHtml(Html.fromHtml(spannableAsHtml)));
+        Spannable spannable = convertHtmlStringToSpannable(spannableAsHtml);
 
         Bitmap image = BitmapConverter.getImage(cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE)));
 
-        //Default val
         Date date;
 
         try {
@@ -137,11 +140,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             title = "";
             e.printStackTrace();
         }
-
-        if (spannable.length() >= 2) {
-            spannable = (Spannable) spannable.subSequence(0, spannable.length() - 2);
-        }
-
 
         db.close();
         cursor.close();
@@ -181,7 +179,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public int updateNote(Note note) {
         SQLiteDatabase db = getWritableDatabase();
 
-        String spannableAsHtml = Html.toHtml(note.getSpannable());
+        String spannableAsHtml = convertSpannableToHtmlString(note.getSpannable());
 
         String date = dt.format(new Date());
 
@@ -207,7 +205,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
-                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE)));
+                Spannable spannable = convertHtmlStringToSpannable(cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE)));
                 Bitmap image = BitmapConverter.getImage(cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE)));
                 //Default val
                 Date date;
@@ -236,51 +234,42 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return notes;
     }
 
-    /**
-     * Method used to get all notes in Database
-     * @return Array of Notes, containing all notes in Database
-     */
-    public Note[] getAllNotesAsArray() {
-        ArrayList<Note> notes = new ArrayList<>();
-
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NOTES, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
-                Spannable spannable = (Spannable) Html.fromHtml(cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE)));
-                Bitmap image = BitmapConverter.getImage(cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE)));
-                //Default val
-                Date date;
-
-                try {
-                    date = dt.parse(cursor.getString(cursor.getColumnIndex(KEY_DATE_UPDATED)));
-                } catch (Exception e) {
-                    date = new Date();
-                    e.printStackTrace();
-                }
-
-                String title;
-                try {
-                    title = cursor.getString(cursor.getColumnIndex(KEY_NOTE_TITLE));
-                } catch (Exception e) {
-                    title = "";
-                    e.printStackTrace();
-                }
-
-                Note note = new Note(id, title, spannable, image, date);
-                notes.add(note);
-            }
-            while (cursor.moveToNext());
+    private Spannable convertHtmlStringToSpannable(String htmlString) {
+        Spanned spanned;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            spanned = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            spanned = Html.fromHtml(htmlString);
         }
 
-        Note[] result = new Note[notes.size()];
-
-        for (int i = 0; i < notes.size(); i++) {
-            result[i] = notes.get(i);
+        final String newLine = "\n";
+        // Html.toHtml() appends newLine to end of text.
+        // This is workaround for that situation.
+        while (spanned.toString().endsWith(newLine)) {
+            spanned = new SpannedString(spanned.subSequence(0, spanned.length() - newLine.length()));
         }
-        cursor.close();
-        return result;
+        return new SpannableString(spanned);
     }
+
+    private String convertSpannableToHtmlString(Spannable spannable) {
+        String htmlString;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            htmlString = Html.toHtml(spannable, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            htmlString = Html.toHtml(spannable);
+        }
+        return removeAllSuffixingNewlines(htmlString);
+    }
+
+    private String removeAllSuffixingNewlines(String string) {
+        // Html.toHtml() appends newLine to end of text.
+        // This is workaround for that situation.
+        final String newLine = "\n";
+        while (string.lastIndexOf(newLine) != -1
+                && string.lastIndexOf(newLine) == string.length() - newLine.length()) {
+            string = string.substring(0, string.length() - newLine.length());
+        }
+        return string;
+    }
+
 }

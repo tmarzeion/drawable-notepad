@@ -424,13 +424,18 @@ public class NoteActivity extends AppCompatActivity {
         spannable = editText.getText();
         String title = noteTitle.getText().toString();
 
-        if (noteID == -1) {
-            Note note = new Note(dbHandler.getNoteCount(), title, spannable, drawingView.getCanvasBitmap(), new Date());
-            new SaveOrUpdateNoteTask(this, dbHandler, false).execute(note);
-        } else {
-            Note note = new Note(noteID, title, spannable, drawingView.getCanvasBitmap(), new Date());
-            new SaveOrUpdateNoteTask(this, dbHandler, true).execute(note);
+        Note note = new Note();
+
+        note.setTitle(title);
+        note.setSpannable(spannable);
+        note.setImage(drawingView.getCanvasBitmap());
+        note.setDateUpdated(new Date());
+
+        if (noteID != -1) {
+            note.setId(noteID);
         }
+
+        new SaveOrUpdateNoteTask(this).execute(note);
 
         hideSoftKeyboard();
         finish();
