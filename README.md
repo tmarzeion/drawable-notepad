@@ -1,3 +1,4 @@
+[![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=59ceb086a89efa0001364f5f&branch=develop&build=latest)](https://dashboard.buddybuild.com/apps/59ceb086a89efa0001364f5f/build/latest?branch=develop)
 # Drawable Notepad
 [![Drawable Notepad](http://i.imgur.com/M9BBBpJ.png)](https://github.com/szafir1100/drawable-notepad)
 ## ~~NOTE: Not supported anymore :(~~
