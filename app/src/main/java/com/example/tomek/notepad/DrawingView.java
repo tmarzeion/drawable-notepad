@@ -74,17 +74,13 @@ public class DrawingView extends View {
         canvas.drawPath(drawPath, drawPaint);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float touchX = event.getX();
-        float touchY = event.getY();
-
-        switch (event.getAction()) {
+    public boolean draw(float x, float y, int motionAction) {
+        switch (motionAction) {
             case MotionEvent.ACTION_DOWN:
-                drawPath.moveTo(touchX, touchY);
+                drawPath.moveTo(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                drawPath.lineTo(touchX, touchY);
+                drawPath.lineTo(x, y);
                 break;
             case MotionEvent.ACTION_UP:
                 drawCanvas.drawPath(drawPath, drawPaint);
@@ -92,10 +88,14 @@ public class DrawingView extends View {
                 break;
             default:
                 return false;
-
         }
         invalidate();
         return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return draw(event.getX(), event.getY(), event.getAction());
     }
 
     public void startNew(){

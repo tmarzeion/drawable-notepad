@@ -158,7 +158,7 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (isDrawModeOn) {
-                    drawingView.onTouchEvent(event);
+                    drawingView.draw(event.getX() + editText.getX(), event.getY() + editText.getY(), event.getAction());
                     return true;
                 } else {
                     return false;

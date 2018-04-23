@@ -206,7 +206,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
                 Spannable spannable = convertHtmlStringToSpannable(cursor.getString(cursor.getColumnIndex(KEY_SPANNABLE_NOTE)));
-                Bitmap image = BitmapConverter.getImage(cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE)));
                 //Default val
                 Date date;
 
@@ -225,7 +224,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
 
-                Note note = new Note(id, title, spannable, image, date);
+                Note note = new Note(id, title, spannable, null, date);
                 notes.add(note);
             }
             while (cursor.moveToNext());
