@@ -1,7 +1,8 @@
-package com.example.tomek.notepad;
+package com.example.tomek.notepad.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +13,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.tomek.notepad.R;
 
 public class DrawingView extends View {
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#7990aa</color>
+    <color name="colorPrimaryTransparent">#2C7990AA</color>
     <color name="colorPrimaryDark">#54748b</color>
     <color name="colorAccent">#8499b1</color>
     <color name="colorLightAccent">#bdcfe4</color>
@@ -11,5 +12,8 @@
     <color name="textFormatGreen">#32cd32</color>
     <color name="textFormatYellow">#e6e200</color>
     <color name="textFormatWhite">#EEEEEE</color>
+
+    <color name="gradient_transparent_color">#FAFAFA</color>
+    <color name="gradient_transparent_black_color">#16000000</color>
 
 </resources>

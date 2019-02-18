@@ -1,4 +1,4 @@
-package com.example.tomek.notepad;
+package com.example.tomek.notepad.model;
 
 import android.graphics.Bitmap;
 import android.text.Spannable;

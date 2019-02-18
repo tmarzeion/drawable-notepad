@@ -1,4 +1,4 @@
-package com.example.tomek.notepad;
+package com.example.tomek.notepad.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,6 +13,9 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.SpannedString;
+
+import com.example.tomek.notepad.model.Note;
+import com.example.tomek.notepad.utils.BitmapConverter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -146,14 +149,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return new Note(id, title, spannable, image, date);
     }
 
+    public void saveOrUpdateNote(Note note) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NOTES, new String[]{KEY_ID}, KEY_ID + "=?",
+                new String[]{String.valueOf(note.getId())}, null, null, null, null);
+        if (!cursor.moveToFirst()) {
+            createNote(note);
+        } else {
+            updateNote(note);
+        }
+    }
     /**
      * Method used to delete specified Note from Database
-     * @param note Note to delete
+     * @param noteId Note with specified id to delete
      */
-    public void deleteNote(Note note) {
-        deleteNote(note.getId());
-    }
-
     public void deleteNote(int noteId) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NOTES, KEY_ID + "=?", new String[]{String.valueOf(noteId)});

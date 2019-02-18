@@ -1,4 +1,4 @@
-package com.example.tomek.notepad;
+package com.example.tomek.notepad.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

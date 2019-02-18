@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.tomek.notepad.MainActivity">
+    tools:context="com.example.tomek.notepad.activities.NoteListActivity">
 
     <item android:id="@+id/search"
         android:title="@string/action_search"
@@ -13,6 +13,5 @@
         android:id="@+id/action_delete_all_notes"
         android:icon="@drawable/ic_delete_24px"
         android:title="@string/action_delete_all"
-        android:onClick="showAlertDialogDeleteAllNotes"
         app:showAsAction="ifRoom"/>
 </menu>

@@ -1,8 +1,6 @@
-package com.example.tomek.notepad;
+package com.example.tomek.notepad.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
@@ -33,6 +31,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.tomek.notepad.database.DatabaseHandler;
+import com.example.tomek.notepad.views.DrawingView;
+import com.example.tomek.notepad.model.Note;
+import com.example.tomek.notepad.R;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -58,8 +61,7 @@ public class NoteActivity extends AppCompatActivity {
     //TODO Disable text/draw panel when back button is clicked. Prevents user from saving note when tries to close panel with back button
 
     // Draw mode booleans
-    private boolean isDrawModeOn;
-    private boolean isTextModeOn;
+    private boolean drawMode;
 
     // Drawing canvas
     private DrawingView drawingView;
@@ -98,10 +100,6 @@ public class NoteActivity extends AppCompatActivity {
     // Converted to HTML String in database
     private Spannable spannable;
 
-    // Alert dialog for back button and save button
-    private AlertDialog alertDialogSaveNote;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,8 +113,7 @@ public class NoteActivity extends AppCompatActivity {
         drawingView = (DrawingView) findViewById(R.id.drawing);
 
         // set boolean values
-        isDrawModeOn = false;
-        isTextModeOn = true;
+        drawMode = false;
 
         // Get params for format text panel and draw panel
         ViewGroup.LayoutParams paramsTextFormat = mSliderLayout.getLayoutParams();
@@ -129,9 +126,6 @@ public class NoteActivity extends AppCompatActivity {
 
         // Get default spannable value
         spannable = editText.getText();
-
-        // Setup AlertDialog
-        alertDialogSaveNote = initAlertDialogSaveNote();
 
         // get ID data from intent
         Intent intent = getIntent();
@@ -154,10 +148,9 @@ public class NoteActivity extends AppCompatActivity {
 
         // Handling drawingView's onTouchListener via EditText onTouchListener
         editText.setOnTouchListener(new View.OnTouchListener() {
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (isDrawModeOn) {
+                if (drawMode) {
                     drawingView.draw(event.getX() + editText.getX(), event.getY() + editText.getY(), event.getAction());
                     return true;
                 } else {
@@ -172,27 +165,6 @@ public class NoteActivity extends AppCompatActivity {
         // Creating menu
         getMenuInflater().inflate(R.menu.menu_note, menu);
         return true;
-    }
-
-    /**
-     * Method used for first setup of done button AlertDialog
-     */
-    private AlertDialog initAlertDialogSaveNote() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(this.getString(R.string.save_note_title)).setMessage(this.getString(R.string.save_note_confirmation));
-
-        builder.setPositiveButton(this.getString(R.string.ok_button), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
-            }
-        });
-        builder.setNegativeButton(this.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Nothing happens here...
-            }
-        });
-        return builder.create();
     }
 
     /**
@@ -235,8 +207,8 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         // After changes:
-        setDrawModeOn(formatTextSliderView.getVisibility() != View.VISIBLE
-                && drawPanelSliderView.getVisibility() == View.VISIBLE);
+        drawMode = formatTextSliderView.getVisibility() != View.VISIBLE
+                && drawPanelSliderView.getVisibility() == View.VISIBLE;
     }
 
     /**
@@ -260,18 +232,8 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         // After changes:
-        setDrawModeOn(drawPanelSliderView.getVisibility() == View.VISIBLE);
+        drawMode = drawPanelSliderView.getVisibility() == View.VISIBLE;
     }
-
-    /**
-     * Method used to set draw mode on
-     * Draw mode is relative to text mode (may be useful in later upates)
-     */
-    private void setDrawModeOn(boolean isOn) {
-        isDrawModeOn = isOn;
-        isTextModeOn = !isOn;
-    }
-
 
     /**
      * Method that calculates space left for EditText when format text panel is Visible
@@ -424,7 +386,7 @@ public class NoteActivity extends AppCompatActivity {
         spannable = editText.getText();
         String title = noteTitle.getText().toString();
 
-        Note note = new Note();
+        final Note note = new Note();
 
         note.setTitle(title);
         note.setSpannable(spannable);
@@ -435,10 +397,15 @@ public class NoteActivity extends AppCompatActivity {
             note.setId(noteID);
         }
 
-        new SaveOrUpdateNoteTask(this).execute(note);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dbHandler.saveOrUpdateNote(note);
+                finish();
+            }
+        }).run();
 
         hideSoftKeyboard();
-        finish();
     }
 
     /**

@@ -7,6 +7,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.text.Spannable;
 import android.text.SpannableString;
 
+import com.example.tomek.notepad.database.DatabaseHandler;
+import com.example.tomek.notepad.model.Note;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

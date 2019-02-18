@@ -54,4 +54,6 @@
 	<!-- Used in content_text_format.xml -->
 	<string name="text_color">Text color:</string>
 	<string name="style">Style:</string>
+
+	<string name="no_title">No title</string>
 </resources>
