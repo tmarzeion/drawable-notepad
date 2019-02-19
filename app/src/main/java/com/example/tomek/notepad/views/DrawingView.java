@@ -134,6 +134,11 @@ public class DrawingView extends View {
         return canvasBitmap;
     }
 
+    public boolean isBlank() {
+        Bitmap blankToCompare = Bitmap.createBitmap(canvasBitmap.getWidth(), canvasBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        return blankToCompare.sameAs(canvasBitmap);
+    }
+
     public void setBitmap(Bitmap bmp) {
         canvasBitmap = bmp;
     }

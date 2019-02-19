@@ -3,14 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
-    android:layout_marginTop="4dp">
+    android:layout_height="110dp">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/note_background"
         android:scaleType="matrix"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:alpha="0.1"/>
 
     <ImageView
         android:id="@+id/noteImage"
@@ -82,6 +87,7 @@
     </ScrollView>
 
     <View
+        android:id="@+id/noteClickableOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"

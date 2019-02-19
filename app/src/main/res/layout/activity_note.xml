@@ -10,6 +10,12 @@
     android:paddingRight="0dp"
     android:background="@drawable/note_background">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:alpha="0.1"/>
+
     <com.example.tomek.notepad.views.DrawingView
         android:id="@+id/drawing"
         android:layout_width="match_parent"

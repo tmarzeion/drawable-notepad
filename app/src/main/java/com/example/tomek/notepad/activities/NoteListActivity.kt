@@ -3,6 +3,8 @@ package com.example.tomek.notepad.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
@@ -18,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 /**
  * Main Activity class
  */
-class NoteListActivity : AppCompatActivity() {
+class NoteListActivity : AppCompatActivity(), NotesListEpoxyController.OnNoteActionPerformed {
 
     // Database Handler
     private lateinit var dbHandler: DatabaseHandler
@@ -45,7 +47,12 @@ class NoteListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        epoxyController = NotesListEpoxyController(dbHandler.allNotesAsArrayList, dbHandler, this)
+        // Thread for handling background model diffing/building
+        val handlerThread = HandlerThread("epoxy")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+
+        epoxyController = NotesListEpoxyController(dbHandler.allNotesAsArrayList, dbHandler, this, this, handler)
         notesRecyclerView.adapter = epoxyController.adapter
         notesRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -77,6 +84,10 @@ class NoteListActivity : AppCompatActivity() {
         })
 
         return true
+    }
+
+    override fun onNoteClicked(id: Int) {
+        editNote(id)
     }
 
     /**

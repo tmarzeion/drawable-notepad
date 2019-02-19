@@ -383,6 +383,14 @@ public class NoteActivity extends AppCompatActivity {
      */
     public void saveOrUpdateNote(@Nullable MenuItem menu) {
 
+        // Don't save note if its blank
+        if (editText.getText().toString().isEmpty()
+        && noteTitle.getText().toString().isEmpty()
+        && drawingView.isBlank()) {
+            finish();
+            return;
+        }
+
         spannable = editText.getText();
         String title = noteTitle.getText().toString();
 
