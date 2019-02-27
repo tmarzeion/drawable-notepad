@@ -35,6 +35,7 @@
             android:maxLength="100"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:textStyle="bold"
             android:hint="Enter title (optional)"/>
 
         <EditText

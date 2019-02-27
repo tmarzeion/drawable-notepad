@@ -11,7 +11,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.example.tomek.notepad.R
 import com.example.tomek.notepad.epoxy.KotlinHolder
 
-@EpoxyModelClass(layout = R.layout.note_item)
+@EpoxyModelClass(layout = R.layout.item_note)
 abstract class NoteListItemModel : EpoxyModelWithHolder<Holder>() {
 
     @EpoxyAttribute

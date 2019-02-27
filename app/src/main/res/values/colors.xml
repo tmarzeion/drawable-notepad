@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#7990aa</color>
-    <color name="colorPrimaryTransparent">#607990AA</color>
-    <color name="colorPrimaryDark">#54748b</color>
-    <color name="colorAccent">#8499b1</color>
-    <color name="colorLightAccent">#bdcfe4</color>
+
+    <color name="colorPrimary">#798A35</color>
+    <color name="colorPrimaryTransparent">#4A798A35</color>
+    <color name="colorPrimaryTransparentSecondary">#23798A35</color>
+    <color name="colorPrimaryDark">#4C5721</color>
+    <color name="colorAccent">#B0BB43</color>
 
     <color name="textFormatBlack">#000000</color>
     <color name="textFormatRed">#e8000d</color>
@@ -12,8 +13,5 @@
     <color name="textFormatGreen">#32cd32</color>
     <color name="textFormatYellow">#e6e200</color>
     <color name="textFormatWhite">#EEEEEE</color>
-
-    <color name="gradient_transparent_color">#FAFAFA</color>
-    <color name="gradient_transparent_black_color">#00000000</color>
 
 </resources>

@@ -12,11 +12,16 @@ class NotesListEpoxyController(var notes: MutableList<Note>, private val dbHandl
                                val context: Context, val onNoteActionPerformed: OnNoteActionPerformed,
                                handler: Handler) : EpoxyController(handler, handler) {
 
+    private var currentStringFilter: String = ""
+
     override fun buildModels() {
         if (notes.isEmpty()) {
             //TODO
         } else {
-            notes.forEach {
+            notes.filter {
+                it.title.contains(currentStringFilter)
+                        || it.rawText.contains(currentStringFilter)
+            }.forEach {
                 val title =
                 if (StringUtils.isNotEmpty(it.title)) {
                     it.title
@@ -36,6 +41,11 @@ class NotesListEpoxyController(var notes: MutableList<Note>, private val dbHandl
                         .addTo(this)
             }
         }
+    }
+
+    fun filterByQuery(query: String) {
+        currentStringFilter = query
+        requestModelBuild()
     }
 
     interface OnNoteActionPerformed {

@@ -15,12 +15,12 @@ import android.widget.SearchView
 import com.example.tomek.notepad.database.DatabaseHandler
 import com.example.tomek.notepad.R
 import com.example.tomek.notepad.epoxy.noteslist.NotesListEpoxyController
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_note_list.*
 
 /**
  * Main Activity class
  */
-class NoteListActivity : AppCompatActivity(), NotesListEpoxyController.OnNoteActionPerformed {
+class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPerformed {
 
     // Database Handler
     private lateinit var dbHandler: DatabaseHandler
@@ -30,7 +30,7 @@ class NoteListActivity : AppCompatActivity(), NotesListEpoxyController.OnNoteAct
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_note_list)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -71,14 +71,19 @@ class NoteListActivity : AppCompatActivity(), NotesListEpoxyController.OnNoteAct
         val searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView.queryHint = searchView.context.resources.getString(R.string.search_hint)
 
+        searchView.setOnCloseListener {
+            hideSoftKeyboard()
+            false
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
-                //TODO
+                epoxyController.filterByQuery(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                // Do nothing
+                searchView.onActionViewCollapsed()
                 return true
             }
         })
@@ -101,18 +106,6 @@ class NoteListActivity : AppCompatActivity(), NotesListEpoxyController.OnNoteAct
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("id", noteId.toString())
         startActivity(intent)
-    }
-
-    /**
-     * Method used to hide keyboard
-     */
-    private fun hideSoftKeyboard() {
-        if (this.currentFocus != null) {
-            try {
-                val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(this.currentFocus.applicationWindowToken, 0)
-            } catch (ignored: RuntimeException) { }
-        }
     }
 
 }

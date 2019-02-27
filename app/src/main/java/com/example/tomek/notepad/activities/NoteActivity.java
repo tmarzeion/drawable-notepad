@@ -47,7 +47,7 @@ import java.util.Date;
  * - Text formatting
  * - Drawing
  */
-public class NoteActivity extends AppCompatActivity {
+public class NoteActivity extends BaseActivity {
 
     //TODO fix bug that adds two empty lines into loaded note (fixed like a retard)
     //TODO Enable choice of voice matches?
@@ -259,20 +259,6 @@ public class NoteActivity extends AppCompatActivity {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         if (findViewById(R.id.drawPanelSlider).getVisibility() == View.VISIBLE) {
             findViewById(R.id.drawPanelSlider).setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Method used to hide keyboard
-     */
-    private void hideSoftKeyboard() {
-        if (this.getCurrentFocus() != null) {
-            try {
-                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(this.getCurrentFocus().getApplicationWindowToken(), 0);
-            } catch (RuntimeException e) {
-                //ignore
-            }
         }
     }
 

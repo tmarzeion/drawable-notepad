@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-ext.supportLibraryVersion = '26.1.0'
+ext.supportLibraryVersion = '28.0.0'
 
 repositories {
     maven {
@@ -13,11 +13,11 @@ repositories {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.tomaszmarzeion.notepad"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 9
         versionName "1.21"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -50,6 +50,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "com.android.support:design:$supportLibraryVersion"
 
     // Epoxy
     implementation 'com.airbnb.android:epoxy:2.18.0'
