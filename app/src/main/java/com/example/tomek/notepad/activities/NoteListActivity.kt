@@ -1,20 +1,20 @@
 package com.example.tomek.notepad.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.Menu
-import android.view.inputmethod.InputMethodManager
+import android.view.MenuItem
 import android.widget.SearchView
 import com.example.tomek.notepad.database.DatabaseHandler
 import com.example.tomek.notepad.R
 import com.example.tomek.notepad.epoxy.noteslist.NotesListEpoxyController
+import com.example.tomek.notepad.model.Note
 import kotlinx.android.synthetic.main.activity_note_list.*
 
 /**
@@ -40,11 +40,20 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
 
         // Floating Action Button listener used to adding new notes
         fab.setOnClickListener {
-            hideSoftKeyboard()
-            val intent = Intent(this, NoteActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-            intent.putExtra("id", "-1")
-            startActivity(intent)
+            if (epoxyController.deleteMode) {
+                epoxyController.selectedNotes.forEach {
+                    dbHandler.deleteNote(it)
+                }
+                epoxyController.notes = dbHandler.allNotesAsArrayList
+                epoxyController.selectedNotes.clear()
+                epoxyController.requestModelBuild()
+            } else {
+                hideSoftKeyboard()
+                val intent = Intent(this, NoteActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.putExtra("id", "-1")
+                startActivity(intent)
+            }
         }
 
         // Thread for handling background model diffing/building
@@ -52,7 +61,8 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
         handlerThread.start()
         val handler = Handler(handlerThread.looper)
 
-        epoxyController = NotesListEpoxyController(dbHandler.allNotesAsArrayList, dbHandler, this, this, handler)
+        epoxyController = NotesListEpoxyController(mutableListOf(), mutableSetOf(), false, dbHandler, this, this, handler)
+
         notesRecyclerView.adapter = epoxyController.adapter
         notesRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -79,6 +89,7 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
                 epoxyController.filterByQuery(newText)
+                epoxyController.requestModelBuild()
                 return true
             }
 
@@ -89,6 +100,26 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
         })
 
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_delete_all_notes -> toggleDeleteMode(item)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun toggleDeleteMode(item: MenuItem) {
+        epoxyController.selectedNotes.clear()
+        epoxyController.deleteMode = !epoxyController.deleteMode
+        if (epoxyController.deleteMode) {
+            item.setIcon(R.drawable.ic_close)
+            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_check))
+        } else {
+            item.setIcon(R.drawable.ic_delete_24px)
+            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_add))
+        }
+        epoxyController.requestModelBuild()
     }
 
     override fun onNoteClicked(id: Int) {
@@ -102,6 +133,7 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
      */
     private fun editNote(noteId: Int) {
         hideSoftKeyboard()
+        epoxyController.revalidateCacheForNote(noteId)
         val intent = Intent(this@NoteListActivity, NoteActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("id", noteId.toString())

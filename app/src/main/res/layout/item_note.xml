@@ -12,8 +12,30 @@
     android:layout_marginEnd="4dp">
 
     <RelativeLayout
+        android:id="@+id/loadingWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:alpha="0.1"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleY="30"
+            android:indeterminate="true"
+            style="?android:attr/progressBarStyleHorizontal"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/contentWrapper"
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <ImageView
@@ -100,6 +122,16 @@
             android:focusable="true"
             style="@style/SelectableItemBackground"
             android:foreground="?attr/selectableItemBackground"/>
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="16dp"/>
 
     </RelativeLayout>
 

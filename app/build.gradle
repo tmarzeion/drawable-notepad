@@ -55,8 +55,12 @@ dependencies {
     // Epoxy
     implementation 'com.airbnb.android:epoxy:2.18.0'
 
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+
     // Annotation processing
     kapt 'com.airbnb.android:epoxy-processor:2.18.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
 
     // Apache commons
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'

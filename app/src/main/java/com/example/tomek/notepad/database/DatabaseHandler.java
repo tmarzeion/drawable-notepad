@@ -17,6 +17,8 @@ import android.text.SpannedString;
 import com.example.tomek.notepad.model.Note;
 import com.example.tomek.notepad.utils.BitmapConverter;
 
+import java.io.File;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
