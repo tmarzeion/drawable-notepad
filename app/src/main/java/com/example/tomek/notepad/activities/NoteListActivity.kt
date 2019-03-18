@@ -40,7 +40,7 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
 
         // Floating Action Button listener used to adding new notes
         fab.setOnClickListener {
-            if (epoxyController.deleteMode) {
+            if (epoxyController.isDeleteMode()) {
                 epoxyController.selectedNotes.forEach {
                     dbHandler.deleteNote(it)
                 }
@@ -61,7 +61,7 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
         handlerThread.start()
         val handler = Handler(handlerThread.looper)
 
-        epoxyController = NotesListEpoxyController(mutableListOf(), mutableSetOf(), false, dbHandler, this, this, handler)
+        epoxyController = NotesListEpoxyController(mutableListOf(), mutableSetOf(), dbHandler, this, this, handler)
 
         notesRecyclerView.adapter = epoxyController.adapter
         notesRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -111,15 +111,14 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
 
     private fun toggleDeleteMode(item: MenuItem) {
         epoxyController.selectedNotes.clear()
-        epoxyController.deleteMode = !epoxyController.deleteMode
-        if (epoxyController.deleteMode) {
+        epoxyController.setDeleteMode(!epoxyController.isDeleteMode())
+        if (epoxyController.isDeleteMode()) {
             item.setIcon(R.drawable.ic_close)
             fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_check))
         } else {
             item.setIcon(R.drawable.ic_delete_24px)
             fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_add))
         }
-        epoxyController.requestModelBuild()
     }
 
     override fun onNoteClicked(id: Int) {
@@ -133,7 +132,6 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
      */
     private fun editNote(noteId: Int) {
         hideSoftKeyboard()
-        epoxyController.revalidateCacheForNote(noteId)
         val intent = Intent(this@NoteListActivity, NoteActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("id", noteId.toString())

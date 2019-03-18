@@ -4,20 +4,24 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
 import com.example.tomek.notepad.R
 import com.example.tomek.notepad.database.DatabaseHandler
 import com.example.tomek.notepad.model.Note
 import org.apache.commons.lang3.StringUtils
+import java.util.*
 
 
 class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: MutableSet<Int> = mutableSetOf(),
-                               var deleteMode: Boolean = false, private val dbHandler: DatabaseHandler,
-                               val context: Context, val onNoteActionPerformed: OnNoteActionPerformed,
+                               private val dbHandler: DatabaseHandler, val context: Context, val onNoteActionPerformed: OnNoteActionPerformed,
                                val handler: Handler) : EpoxyController(handler, handler) {
 
+    private var deleteMode: Boolean = false
     private var currentStringFilter: String = ""
+    private val timerMap = mutableMapOf<Holder, Timer>()
+    private val holders: MutableSet<Holder> = mutableSetOf()
 
     override fun buildModels() {
         if (notes.isEmpty()) {
@@ -40,9 +44,26 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
                         .title(title)
                         .content(it.spannable)
                         .deleteMode(deleteMode)
-                        .selected(selectedNotes.contains(it.id))
-                        .onBind { model, view, position ->
-                            handleCacheImageLoading(it, view)
+                        .onBind { model, holder, position ->
+                            holders.add(holder)
+                            holder.noteImage.setImageBitmap(null)
+                            holder.checkbox.isChecked = selectedNotes.contains(it.id)
+                            if (deleteMode) {
+                                holder.checkbox.visibility = View.VISIBLE
+                            } else {
+                                holder.checkbox.visibility = View.GONE
+                            }
+                            holder.setLoadingMode(true)
+                            val timer = Timer()
+                            timerMap[holder] = timer
+                            timer.schedule(object : TimerTask() {
+                                override fun run() {
+                                    handleCacheImageLoading(it, holder)
+                                }
+                            }, 600L)
+                        }
+                        .onUnbind { model, holder ->
+                            timerMap[holder]?.cancel()
                         }
                         .listener { model, parentView, clickedView, position ->
                             when(clickedView.id) {
@@ -64,9 +85,8 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
 
     private val memoryCachedImages = mutableListOf<Pair<Int, Bitmap>>()
     private fun handleCacheImageLoading(it: Note, holder: Holder) {
-        holder.setLoadingMode(true)
         handler.post {
-            if (!memoryCachedImages.any { cachedImage -> cachedImage.first == it.id }) {
+            if (!hasCachedImage(it)) {
                 if (memoryCachedImages.size >= MAX_CACHED_IMAGES) {
                     memoryCachedImages.remove(memoryCachedImages.first())
                 }
@@ -84,14 +104,28 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
         }
     }
 
+    private fun hasCachedImage(note: Note) : Boolean {
+        return memoryCachedImages.any { cachedImage -> cachedImage.first == note.id }
+    }
+
     fun filterByQuery(query: String) {
         currentStringFilter = query
     }
 
-    fun revalidateCacheForNote(noteId: Int) {
-        memoryCachedImages.removeAt(memoryCachedImages.indexOfFirst {
-            it.first == noteId
-        })
+    fun setDeleteMode(deleteModeEnabled: Boolean) {
+        deleteMode = deleteModeEnabled
+        holders.forEach {
+            it.checkbox.isChecked = false
+            if (deleteMode) {
+                it.checkbox.visibility = View.VISIBLE
+            } else {
+                it.checkbox.visibility = View.GONE
+            }
+        }
+    }
+
+    fun isDeleteMode() : Boolean {
+        return deleteMode
     }
 
     interface OnNoteActionPerformed {

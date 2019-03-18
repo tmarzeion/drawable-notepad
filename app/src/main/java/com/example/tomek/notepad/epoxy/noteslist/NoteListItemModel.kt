@@ -28,9 +28,6 @@ abstract class NoteListItemModel : EpoxyModelWithHolder<Holder>() {
     @EpoxyAttribute
     var deleteMode: Boolean = false
 
-    @EpoxyAttribute
-    var selected: Boolean = false
-
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var listener: View.OnClickListener? = null
 
@@ -40,13 +37,6 @@ abstract class NoteListItemModel : EpoxyModelWithHolder<Holder>() {
         holder.numberView.text = "#${noteId}"
         holder.noteClickableOverlay.setOnClickListener(listener)
         holder.checkbox.setOnClickListener(listener)
-        holder.checkbox.isChecked = selected
-
-        if (deleteMode) {
-            holder.checkbox.visibility = View.VISIBLE
-        } else {
-            holder.checkbox.visibility = View.GONE
-        }
     }
 
 }
@@ -58,16 +48,12 @@ class Holder : KotlinHolder() {
     val noteImage by bind<ImageView>(R.id.noteImage)
     val noteClickableOverlay by bind<View>(R.id.noteClickableOverlay)
     val checkbox by bind<CheckBox>(R.id.checkbox)
-    val loadingWrapper by bind<ViewGroup>(R.id.loadingWrapper)
-    val contentWrapper by bind<ViewGroup>(R.id.contentWrapper)
 
     fun setLoadingMode(loading: Boolean) {
         if (loading) {
-            loadingWrapper.visibility = View.VISIBLE
-            contentWrapper.visibility = View.INVISIBLE
+            noteImage.alpha = 0.0f
         } else {
-            loadingWrapper.visibility = View.INVISIBLE
-            contentWrapper.visibility = View.VISIBLE
+            noteImage.animate().alpha(0.5f)
         }
     }
 

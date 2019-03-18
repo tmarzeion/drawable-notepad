@@ -12,30 +12,8 @@
     android:layout_marginEnd="4dp">
 
     <RelativeLayout
-        android:id="@+id/loadingWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:alpha="0.1"/>
-
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleY="30"
-            android:indeterminate="true"
-            style="?android:attr/progressBarStyleHorizontal"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/contentWrapper"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent">
 
         <ImageView
