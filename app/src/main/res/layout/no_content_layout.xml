@@ -26,6 +26,7 @@
             android:textSize="24sp"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
+            android:textAlignment="center"
             tools:text="Some view without content!"/>
 
     </LinearLayout>

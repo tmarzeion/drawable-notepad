@@ -64,7 +64,6 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
                         .noteId(it.id)
                         .title(title)
                         .content(it.spannable)
-                        .deleteMode(deleteMode)
                         .onBind { model, holder, position ->
                             holders.add(holder)
                             holder.noteImage.setImageBitmap(null)
@@ -99,6 +98,15 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
                                 }
                                 R.id.noteClickableOverlay -> onNoteActionPerformed.onNoteClicked(it.id)
                             }
+                        }
+                        .longClickListener { model, parentView, clickedView, position ->
+                            if (clickedView.id == R.id.noteClickableOverlay) {
+                                if (!deleteMode) {
+                                    setDeleteMode(true)
+                                }
+                                parentView.checkbox.performClick()
+                            }
+                            true
                         }
                         .addTo(this)
             }

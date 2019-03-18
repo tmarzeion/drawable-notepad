@@ -25,11 +25,11 @@ abstract class NoteListItemModel : EpoxyModelWithHolder<Holder>() {
     @EpoxyAttribute
     lateinit var content: Spannable
 
-    @EpoxyAttribute
-    var deleteMode: Boolean = false
-
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var listener: View.OnClickListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var longClickListener: View.OnLongClickListener? = null
 
     override fun bind(holder: Holder) {
         holder.titleView.text = title
@@ -37,6 +37,7 @@ abstract class NoteListItemModel : EpoxyModelWithHolder<Holder>() {
         holder.numberView.text = "#${noteId}"
         holder.numberView.tag = noteId
         holder.noteClickableOverlay.setOnClickListener(listener)
+        holder.noteClickableOverlay.setOnLongClickListener(longClickListener)
         holder.checkbox.setOnClickListener(listener)
     }
 
