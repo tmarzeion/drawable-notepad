@@ -4,11 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
 import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
 import com.example.tomek.notepad.R
 import com.example.tomek.notepad.database.DatabaseHandler
+import com.example.tomek.notepad.epoxy.NoContentViewModel_
 import com.example.tomek.notepad.model.Note
 import org.apache.commons.lang3.StringUtils
 import java.util.*
@@ -25,19 +28,36 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
     private val memoryCachedImages = mutableListOf<Pair<Int, Bitmap>>()
 
     override fun buildModels() {
-        if (notes.isEmpty()) {
-            //TODO
+
+        val filteredNotes = notes.filter {
+            it.title.contains(currentStringFilter)
+                    || it.rawText.contains(currentStringFilter)
+        }
+
+        if (filteredNotes.isEmpty()) {
+            @DrawableRes val noContentIcon: Int
+            @StringRes val noContentDescription: Int
+            if (currentStringFilter.isEmpty()) {
+                noContentIcon = R.drawable.no_content
+                noContentDescription = R.string.no_notes
+            } else {
+                noContentIcon = R.drawable.ic_search_24px
+                noContentDescription = R.string.note_not_found
+            }
+            NoContentViewModel_()
+                    .id("empty-item")
+                    .color(R.color.colorPrimary)
+                    .drawable(noContentIcon)
+                    .description(noContentDescription)
+                    .addTo(this)
         } else {
-            notes.filter {
-                it.title.contains(currentStringFilter)
-                        || it.rawText.contains(currentStringFilter)
-            }.forEach {
+            filteredNotes.forEach {
                 val title =
-                if (StringUtils.isNotEmpty(it.title)) {
-                    it.title
-                } else {
-                    context.getString(R.string.no_title)
-                }
+                        if (StringUtils.isNotEmpty(it.title)) {
+                            it.title
+                        } else {
+                            context.getString(R.string.no_title)
+                        }
 
                 NoteListItemModel_()
                         .id(it.id)
@@ -69,14 +89,13 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
                             timerMap[holder]?.cancel()
                         }
                         .listener { model, parentView, clickedView, position ->
-                            when(clickedView.id) {
+                            when (clickedView.id) {
                                 R.id.checkbox -> {
                                     if (selectedNotes.contains(it.id)) {
                                         selectedNotes.remove(it.id)
                                     } else {
                                         selectedNotes.add(it.id)
                                     }
-                                    requestModelBuild()
                                 }
                                 R.id.noteClickableOverlay -> onNoteActionPerformed.onNoteClicked(it.id)
                             }
@@ -94,8 +113,7 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
                 }
                 memoryCachedImages.add(Pair(it.id, dbHandler.getNote(it.id).image))
             }
-            val resolvedImage = memoryCachedImages[memoryCachedImages.indexOfFirst {
-                cachedImage -> cachedImage.first == it.id }
+            val resolvedImage = memoryCachedImages[memoryCachedImages.indexOfFirst { cachedImage -> cachedImage.first == it.id }
             ].second
             Handler(Looper.getMainLooper()).post {
                 Glide.with(holder.noteImage.context)
@@ -106,7 +124,7 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
         }
     }
 
-    private fun hasCachedImage(note: Note) : Boolean {
+    private fun hasCachedImage(note: Note): Boolean {
         return memoryCachedImages.any { cachedImage -> cachedImage.first == note.id }
     }
 
@@ -138,7 +156,7 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
         }?.noteImage?.setImageBitmap(bitmap)
     }
 
-    fun isDeleteMode() : Boolean {
+    fun isDeleteMode(): Boolean {
         return deleteMode
     }
 

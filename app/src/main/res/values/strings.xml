@@ -56,4 +56,6 @@
 	<string name="style">Style:</string>
 
 	<string name="no_title">No title</string>
+    <string name="no_notes">No notes present</string>
+	<string name="note_not_found">Note not found</string>
 </resources>
