@@ -14,8 +14,8 @@ import android.widget.SearchView
 import com.example.tomek.notepad.database.DatabaseHandler
 import com.example.tomek.notepad.R
 import com.example.tomek.notepad.epoxy.noteslist.NotesListEpoxyController
-import com.example.tomek.notepad.model.Note
 import kotlinx.android.synthetic.main.activity_note_list.*
+import android.app.Activity
 
 /**
  * Main Activity class
@@ -66,6 +66,20 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
         notesRecyclerView.adapter = epoxyController.adapter
         notesRecyclerView.layoutManager = LinearLayoutManager(this)
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == UPDATE_NOTE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val noteId = data?.extras?.get(EXTRA_RESULT_NOTE_ID_KEY) as Int
+                Handler().run {
+                    val bitmap = dbHandler.getNote(noteId).image
+                    runOnUiThread {
+                        epoxyController.invalidateBitmap(noteId, bitmap)
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -135,7 +149,12 @@ class NoteListActivity : BaseActivity(), NotesListEpoxyController.OnNoteActionPe
         val intent = Intent(this@NoteListActivity, NoteActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("id", noteId.toString())
-        startActivity(intent)
+        startActivityForResult(intent, UPDATE_NOTE_REQUEST_CODE)
+    }
+
+    companion object {
+        const val UPDATE_NOTE_REQUEST_CODE = 2137
+        const val EXTRA_RESULT_NOTE_ID_KEY = "ExtraNoteId"
     }
 
 }

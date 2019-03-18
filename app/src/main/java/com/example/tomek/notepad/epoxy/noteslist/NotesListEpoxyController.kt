@@ -22,6 +22,7 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
     private var currentStringFilter: String = ""
     private val timerMap = mutableMapOf<Holder, Timer>()
     private val holders: MutableSet<Holder> = mutableSetOf()
+    private val memoryCachedImages = mutableListOf<Pair<Int, Bitmap>>()
 
     override fun buildModels() {
         if (notes.isEmpty()) {
@@ -50,8 +51,10 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
                             holder.checkbox.isChecked = selectedNotes.contains(it.id)
                             if (deleteMode) {
                                 holder.checkbox.visibility = View.VISIBLE
+                                holder.checkbox.alpha = 1.0f
                             } else {
                                 holder.checkbox.visibility = View.GONE
+                                holder.checkbox.alpha = 0.0f
                             }
                             holder.setLoadingMode(true)
                             val timer = Timer()
@@ -83,7 +86,6 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
         }
     }
 
-    private val memoryCachedImages = mutableListOf<Pair<Int, Bitmap>>()
     private fun handleCacheImageLoading(it: Note, holder: Holder) {
         handler.post {
             if (!hasCachedImage(it)) {
@@ -118,10 +120,22 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
             it.checkbox.isChecked = false
             if (deleteMode) {
                 it.checkbox.visibility = View.VISIBLE
+                it.checkbox.animate().alpha(1.0f).duration = CHECKBOX_FADE_TIME
             } else {
-                it.checkbox.visibility = View.GONE
+                Handler(Looper.getMainLooper()).postDelayed({ it.checkbox.visibility = View.GONE }, CHECKBOX_FADE_TIME)
+                it.checkbox.animate().alpha(0.0f).duration = CHECKBOX_FADE_TIME
             }
         }
+    }
+
+    fun invalidateBitmap(noteId: Int, bitmap: Bitmap) {
+        memoryCachedImages.removeAll {
+            it.first == noteId
+        }
+        memoryCachedImages.add(Pair(noteId, bitmap))
+        holders.firstOrNull {
+            it.numberView.tag == noteId
+        }?.noteImage?.setImageBitmap(bitmap)
     }
 
     fun isDeleteMode() : Boolean {
@@ -133,6 +147,7 @@ class NotesListEpoxyController(var notes: MutableList<Note>, var selectedNotes: 
     }
 
     companion object {
+        private const val CHECKBOX_FADE_TIME = 300L
         private const val MAX_CACHED_IMAGES = 100
     }
 

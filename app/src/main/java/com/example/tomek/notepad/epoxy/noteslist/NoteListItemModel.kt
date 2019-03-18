@@ -35,6 +35,7 @@ abstract class NoteListItemModel : EpoxyModelWithHolder<Holder>() {
         holder.titleView.text = title
         holder.noteContent.text = content
         holder.numberView.text = "#${noteId}"
+        holder.numberView.tag = noteId
         holder.noteClickableOverlay.setOnClickListener(listener)
         holder.checkbox.setOnClickListener(listener)
     }

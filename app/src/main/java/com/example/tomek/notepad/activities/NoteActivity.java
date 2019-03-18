@@ -39,6 +39,8 @@ import com.example.tomek.notepad.R;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.example.tomek.notepad.activities.NoteListActivity.EXTRA_RESULT_NOTE_ID_KEY;
+
 /**
  * Note Activity class that handles:
  * - New notes creation,
@@ -373,6 +375,7 @@ public class NoteActivity extends BaseActivity {
         if (editText.getText().toString().isEmpty()
         && noteTitle.getText().toString().isEmpty()
         && drawingView.isBlank()) {
+            setResult(RESULT_CANCELED);
             finish();
             return;
         }
@@ -395,6 +398,9 @@ public class NoteActivity extends BaseActivity {
             @Override
             public void run() {
                 dbHandler.saveOrUpdateNote(note);
+                Intent data = new Intent();
+                data.putExtra(EXTRA_RESULT_NOTE_ID_KEY, note.getId());
+                setResult(RESULT_OK, data);
                 finish();
             }
         }).run();
