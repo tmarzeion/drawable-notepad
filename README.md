@@ -2,7 +2,7 @@
 # Drawable Notepad
 [![Drawable Notepad](http://i.imgur.com/M9BBBpJ.png)](https://github.com/szafir1100/drawable-notepad)
 ## ~~NOTE: Not supported anymore :(~~
-27.09.2017 - Lets pimp this project :)
+~~27.09.2017 - Lets pimp this project :)~~ - [Reimplementing App in Flutter framework](https://github.com/tmarzeion/flutter-drawable-notepad)
 
 <br>
 Drawable Notepad is lightweight aplication that allows user to write some notes and draw on them.
