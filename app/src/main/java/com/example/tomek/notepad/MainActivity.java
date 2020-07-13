@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,9 @@ import java.util.ArrayList;
  * Main Activity class
  */
 public class MainActivity extends AppCompatActivity {
+
+    public static final String showUpdateDialogPrefKey = "ShowUpdateDialogKey";
+    public static boolean dialogShown = false;
 
     // Array used to backup data before using search function
     private ArrayList<Note> allNotesSearchArray;
@@ -82,6 +86,27 @@ public class MainActivity extends AppCompatActivity {
                 editNote(selectedNote.getId());
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        final SharedPreferences sharedPrefs = this.getSharedPreferences("Notepad1", MODE_PRIVATE);
+        boolean showUpdateDialog = sharedPrefs.getBoolean(showUpdateDialogPrefKey, true);
+        if (showUpdateDialog && !dialogShown) {
+            final NewVersionDialog newVersionDialog = new NewVersionDialog(this);
+            newVersionDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (newVersionDialog.isDontShowAgainChecked()) {
+                        sharedPrefs.edit().putBoolean(showUpdateDialogPrefKey, false).apply();
+                    }
+                }
+            });
+            newVersionDialog.show();
+            dialogShown = true;
+        }
     }
 
     @Override

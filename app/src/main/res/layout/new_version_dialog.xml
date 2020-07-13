@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/drawable2"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/update_label_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Drawable Notepad 2"
+                android:textColor="@color/textFormatBlack"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/update_label_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New notepad is available!"
+                android:textColor="@color/textFormatBlack"
+                android:layout_below="@id/update_label_1"
+                android:textSize="14sp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/google_play_redirect_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/play_logo"
+        android:layout_margin="8dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/version_dialog_dont_show_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't show this again"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/version_dialog_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:padding="16dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+
+
+    </RelativeLayout>
+
+</LinearLayout>
